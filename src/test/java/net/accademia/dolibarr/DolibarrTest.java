@@ -10,6 +10,11 @@ import org.springframework.web.client.RestTemplate;
 
 public class DolibarrTest {
 
+    /**
+     * nella prima versione legge le fatture
+     * poi inserisce un cliente
+     *
+     */
     @Test
     void InsertCustomer() {
         final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
