@@ -6,6 +6,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class DolibarrTest {
@@ -14,7 +15,6 @@ public class DolibarrTest {
      * Andrea 25/10/2021
      * nella prima versione legge le fatture
      * poi inserisce un cliente
-     * in progress
      *
      */
     @Test
@@ -28,12 +28,12 @@ public class DolibarrTest {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         headers.set("DOLAPIKEY", "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0");
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
         //HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
-        String result = restTemplate.getForObject(uri, String.class);
+        ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        //    Object result = restTemplate.getForObject(uri, Object.class);
 
-        System.out.println(result);
+        System.out.println(ret);
     }
 }
