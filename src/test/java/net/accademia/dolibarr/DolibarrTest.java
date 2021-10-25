@@ -15,7 +15,7 @@ public class DolibarrTest {
      * Andrea 25/10/2021
      * nella prima versione legge le fatture
      * poi inserisce un cliente
-     * prova
+     * restituisce le fatture
      *
      */
     @Test
