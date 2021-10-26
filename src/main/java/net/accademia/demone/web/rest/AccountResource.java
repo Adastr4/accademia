@@ -1,6 +1,6 @@
 package net.accademia.demone.web.rest;
 
-import java.util.*;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import net.accademia.demone.domain.User;
@@ -10,14 +10,22 @@ import net.accademia.demone.service.MailService;
 import net.accademia.demone.service.UserService;
 import net.accademia.demone.service.dto.AdminUserDTO;
 import net.accademia.demone.service.dto.PasswordChangeDTO;
-import net.accademia.demone.web.rest.errors.*;
+import net.accademia.demone.web.rest.errors.EmailAlreadyUsedException;
+import net.accademia.demone.web.rest.errors.InvalidPasswordException;
+import net.accademia.demone.web.rest.errors.LoginAlreadyUsedException;
 import net.accademia.demone.web.rest.vm.KeyAndPasswordVM;
 import net.accademia.demone.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing the current user's account.

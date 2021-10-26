@@ -1,8 +1,14 @@
 package net.accademia.demone.config;
 
-import static net.accademia.demone.config.StaticResourcesWebConfiguration.*;
+import static net.accademia.demone.config.StaticResourcesWebConfiguration.RESOURCE_LOCATIONS;
+import static net.accademia.demone.config.StaticResourcesWebConfiguration.RESOURCE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;

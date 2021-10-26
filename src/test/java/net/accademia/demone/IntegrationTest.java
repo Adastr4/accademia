@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import net.accademia.demone.DemoneApp;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**

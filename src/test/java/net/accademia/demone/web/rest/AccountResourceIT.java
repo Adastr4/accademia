@@ -2,11 +2,17 @@ package net.accademia.demone.web.rest;
 
 import static net.accademia.demone.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import net.accademia.demone.IntegrationTest;
 import net.accademia.demone.config.Constants;
 import net.accademia.demone.domain.User;
@@ -16,7 +22,6 @@ import net.accademia.demone.security.AuthoritiesConstants;
 import net.accademia.demone.service.UserService;
 import net.accademia.demone.service.dto.AdminUserDTO;
 import net.accademia.demone.service.dto.PasswordChangeDTO;
-import net.accademia.demone.service.dto.UserDTO;
 import net.accademia.demone.web.rest.vm.KeyAndPasswordVM;
 import net.accademia.demone.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;

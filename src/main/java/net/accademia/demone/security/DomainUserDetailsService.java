@@ -1,6 +1,7 @@
 package net.accademia.demone.security;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import net.accademia.demone.domain.User;
 import net.accademia.demone.repository.UserRepository;

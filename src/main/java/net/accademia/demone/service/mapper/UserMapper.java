@@ -1,6 +1,10 @@
 package net.accademia.demone.service.mapper;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import net.accademia.demone.domain.Authority;
 import net.accademia.demone.domain.User;

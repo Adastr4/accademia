@@ -1,7 +1,8 @@
 package net.accademia.demone.config;
 
-import net.accademia.demone.security.*;
-import net.accademia.demone.security.jwt.*;
+import net.accademia.demone.security.AuthoritiesConstants;
+import net.accademia.demone.security.jwt.JWTConfigurer;
+import net.accademia.demone.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
