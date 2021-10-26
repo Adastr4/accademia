@@ -22,9 +22,11 @@ public class DolibarrTest {
     DolibarrBridge db = new DolibarrBridge();
 
     /**
+
      * Andrea 25/10/2021 nella prima versione legge le fatture poi inserisce un
      * cliente restituisce le fatture prova
      *
+
      */
     /**
      * {@code
