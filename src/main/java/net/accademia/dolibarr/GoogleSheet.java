@@ -77,7 +77,7 @@ public class GoogleSheet {
             // Build a new authorized API client service.
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-            final String range = "Risposte del modulo 1!A2:E";
+            final String range = "Risposte del modulo 1!A2:S";
             Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
@@ -100,7 +100,9 @@ public class GoogleSheet {
                         .findAny()
                         .orElse(null);
                     if (c == null) {
-                        dm.getClienti().add(new Cliente((String) row.get(4)));
+                        dm
+                            .getClienti()
+                            .add(new Cliente((String) row.get(14), (String) row.get(11), (String) row.get(15), Fonte.GOOGLESHEET));
                     }
 
                     Contatto co = dm
@@ -110,7 +112,9 @@ public class GoogleSheet {
                         .findAny()
                         .orElse(null);
                     if (co == null) {
-                        dm.getContatti().add(new Contatto((String) row.get(4)));
+                        dm
+                            .getContatti()
+                            .add(new Contatto((String) row.get(1), (String) row.get(2), (String) row.get(3), Fonte.GOOGLESHEET));
                     }
                 }
             }

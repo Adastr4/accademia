@@ -1,15 +1,26 @@
 package net.accademia.dolibarr;
 
-public class Cliente {
+public class Cliente extends Contatto {
 
-    String _mail;
-
-    Cliente(String mail) {
-        _mail = mail;
+    Cliente(String mail, String firstname, String vat, Fonte f) {
+        super(mail, firstname, vat, f);
+        // TODO Auto-generated constructor stub
     }
 
-    public String getmail() {
+    public String getVat() {
         // TODO Auto-generated method stub
-        return _mail;
+        return lastname;
+    }
+
+    public String getJson() {
+        return (
+            "{\"name\": \"" +
+            firstname.replace('\"', '\'') +
+            "\",\"client\": \"1\",\"prospect\": 0,\"fournisseur\": \"0\",	\"code_client\": \"auto\",\"email\":\"" +
+            _mail +
+            "\",\"tva_intra\":\"" +
+            getVat() +
+            "\"}"
+        );
     }
 }

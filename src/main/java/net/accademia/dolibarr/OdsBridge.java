@@ -28,30 +28,50 @@ public class OdsBridge {
             // Iterating through each row of the selected sheet
             MutableCell cell = null;
             for (int nRowIndex = 1; nRowIndex < nRowCount; nRowIndex++) {
+                final int currindex = nRowIndex;
                 // Iterating through each column
-                String input =
-                    "{\"lastname\":\"" +
-                    spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue() +
-                    "\", \"firstname\":\"" +
-                    spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue() +
-                    "\", \"email\":\"" +
-                    spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue() +
-                    "\"}";
-
-                //				if (!contattoEsiste((String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue()))
-                //					insertContact(input, (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue());
-
+                if (dm == null) continue;
+                if (dm.getClienti() == null) continue;
+                if (dm.getContatti() == null) continue;
                 try {
-                    input =
-                        "{\"name\": \"" +
-                        ((String) spreadsheet.getSheet(0).getCellAt(8, nRowIndex).getValue()).replace('\"', '\'') +
-                        "\",\"client\": \"1\",\"prospect\": 0,\"fournisseur\": \"0\",	\"code_client\": \"auto\",\"email\":\"" +
-                        (String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue() +
-                        "\",\"tva_intra\":\"" +
-                        getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)) +
-                        "\"}";
-                    //					if (!customerEsiste((String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue()))
-                    //						insertCustomer(input, (String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue());
+                    Cliente c = dm
+                        .getClienti()
+                        .stream()
+                        .filter(cliente -> ((String) spreadsheet.getSheet(0).getCellAt(11, currindex).getValue()).equals(cliente.getmail()))
+                        .findAny()
+                        .orElse(null);
+                    if (c == null) {
+                        dm
+                            .getClienti()
+                            .add(
+                                new Cliente(
+                                    (String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue(),
+                                    ((String) spreadsheet.getSheet(0).getCellAt(8, nRowIndex).getValue()).replace('\"', '\''),
+                                    getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
+                                    Fonte.FILE
+                                )
+                            );
+                    }
+
+                    Contatto co = dm
+                        .getContatti()
+                        .stream()
+                        .filter(Contatto -> ((String) spreadsheet.getSheet(0).getCellAt(1, currindex).getValue()).equals(Contatto.getmail())
+                        )
+                        .findAny()
+                        .orElse(null);
+                    if (co == null) {
+                        dm
+                            .getContatti()
+                            .add(
+                                new Contatto(
+                                    (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue(),
+                                    (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
+                                    (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
+                                    Fonte.FILE
+                                )
+                            );
+                    }
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

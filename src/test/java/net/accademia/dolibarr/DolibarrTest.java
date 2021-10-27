@@ -49,7 +49,9 @@ public class DolibarrTest {
 
     @Test
     void InsertCustomerTest() {
-        assertTrue(db.InsertCustomers() == 1);
+        Cliente c = new Cliente("vrtd10000n@pec.istruzione.it", "", "93014980234", Fonte.FILE);
+
+        assertTrue(db.insertCustomer(c) == 1);
     }
 
     @Test

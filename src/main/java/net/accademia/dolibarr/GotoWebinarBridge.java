@@ -53,6 +53,7 @@ public class GotoWebinarBridge {
     }
 
     int getIscritti() {
+        getToken();
         Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
         Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
         Date a = new GregorianCalendar(2021, 12, 1).getTime();
@@ -80,7 +81,16 @@ public class GotoWebinarBridge {
                         .findAny()
                         .orElse(null);
                     if (c == null) {
-                        dm.getContatti().add(new Contatto((String) registrant.getEmail()));
+                        dm
+                            .getContatti()
+                            .add(
+                                new Contatto(
+                                    (String) registrant.getEmail(),
+                                    registrant.getLastName(),
+                                    registrant.getFirstName(),
+                                    Fonte.GOTOWEBINAR
+                                )
+                            );
                     }
                 }
             }

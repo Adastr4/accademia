@@ -1,6 +1,7 @@
 package net.accademia.dolibarr;
 
 import com.logmein.gotowebinar.api.model.Webinar;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +48,20 @@ public class DemoneMediator {
      * @return
      */
     int SyncIscrittitoDolibarr() {
-        String[] iscritti = { "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ", "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY" };
+        String[] iscritti = {
+            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
+            "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
+            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
+        };
         for (int i = 0; i < iscritti.length; i++) {
             gs.getIscritti(iscritti[i]);
         }
+
+        gtb.getIscritti();
+
+        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
+        bg.InsertCustomers();
+        bg.insertContacts();
         return 0;
     }
 

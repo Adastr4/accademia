@@ -124,27 +124,47 @@ public class DolibarrBridge {
      * @return
      */
     public int InsertCustomers() {
+        dm.getClienti();
+        for (Cliente cliente : dm.getClienti()) {
+            insertCustomer(cliente);
+        }
+        return 1;
+    }
+
+    int insertCustomer(Cliente cliente) {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         headers.set("DOLAPIKEY", DolibarrKey);
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        // HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-
-        JSONArray json = null;
+        HttpEntity<String> entity = new HttpEntity<String>(cliente.getJson(), headers);
         try {
-            JsonParser parser = new BasicJsonParser();
-            json = (JSONArray) parser.parseMap(ret.getBody());
-            System.out.println(json.toString());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (
+                restTemplate
+                    .exchange(
+                        insertapi +
+                        "?sqlfilters=((t.tva_intra:like:'" +
+                        cliente.getVat() +
+                        "%')or (t.email:like:'" +
+                        cliente.getmail() +
+                        "%'))",
+                        HttpMethod.GET,
+                        entity,
+                        String.class
+                    )
+                    .getStatusCode() ==
+                HttpStatus.OK
+            ) return 1;
+        } catch (RestClientException e) {
+            // contatto già presente
         }
 
+        try {
+            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+        } catch (RestClientException e) {}
         return 1;
     }
 
@@ -168,30 +188,6 @@ public class DolibarrBridge {
         }
 
         return 1;
-    }
-
-    private void insertCustomer(String input, String email) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-
-        HttpEntity<String> entity = new HttpEntity<String>(input, headers);
-
-        try {
-            if (
-                restTemplate.exchange(insertapi + "/email/" + email, HttpMethod.GET, entity, String.class).getStatusCode() == HttpStatus.OK
-            ) return;
-        } catch (RestClientException e) {
-            // contatto già presente
-        }
-
-        try {
-            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-        } catch (RestClientException e) {}
     }
 
     private boolean customerEsiste(String email) {
@@ -244,5 +240,47 @@ public class DolibarrBridge {
             // contatto già presente
         }
         return false;
+    }
+
+    public int insertContacts() {
+        dm.getContatti();
+        for (Contatto c : dm.getContatti()) {
+            insertContact(c);
+        }
+        return 1;
+    }
+
+    private int insertContact(Contatto c) {
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        HttpEntity<String> entity = new HttpEntity<String>(c.getJson(), headers);
+        try {
+            if (
+                restTemplate
+                    .exchange(
+                        insertapi + "?sqlfilters=((t.lastname:like:'" + c.getLastname() + "%') and (t.email:like:'" + c.getmail() + "%'))",
+                        HttpMethod.GET,
+                        entity,
+                        String.class
+                    )
+                    .getStatusCode() ==
+                HttpStatus.OK
+            ) return 1;
+        } catch (RestClientException e) {
+            // contatto già presente
+        }
+
+        try {
+            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+        } catch (RestClientException e) {}
+        return 0;
+        // TODO Auto-generated method stub
+
     }
 }

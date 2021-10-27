@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class OdsBridgeTest {
 
-    OdsBridge db = new OdsBridge(null);
+    OdsBridge db = new OdsBridge(new DemoneMediator());
 
     @Test
     void testReadODS() {
