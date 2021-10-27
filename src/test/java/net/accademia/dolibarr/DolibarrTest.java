@@ -2,6 +2,7 @@ package net.accademia.dolibarr;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -19,20 +20,20 @@ import org.junit.jupiter.api.Test;
  */
 public class DolibarrTest {
 
-    DolibarrBridge db = new DolibarrBridge();
+    DolibarrBridge db = new DolibarrBridge(null);
 
     /**
-
+     *
      * Andrea 25/10/2021 nella prima versione legge le fatture poi inserisce un
      * cliente restituisce le fatture prova
      *
-
+     *
      */
     /**
      * {@code
      * {
-     * 	"ref":"WEBINAR.2021.02.03",
-     * 	"label":"prova", "status":"1", "status_buy":"1", "type":"1" }
+     * 	"ref":"WEBINAR.2021.02.03", "label":"prova", "status":"1", "status_buy":"1",
+     * "type":"1" }
      *
      * }
      */
@@ -48,7 +49,7 @@ public class DolibarrTest {
 
     @Test
     void InsertCustomerTest() {
-        assertTrue(db.InsertCustomer() == 1);
+        assertTrue(db.InsertCustomers() == 1);
     }
 
     @Test
@@ -57,7 +58,5 @@ public class DolibarrTest {
     }
 
     @Test
-    void getIscrittiTest() {
-        assertTrue(db.getIscritti() != null);
-    }
+    void readIscrizioni() {}
 }

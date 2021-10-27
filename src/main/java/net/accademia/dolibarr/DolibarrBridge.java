@@ -1,30 +1,48 @@
 package net.accademia.dolibarr;
 
-import com.logmein.gotowebinar.api.RegistrantsApi;
-import com.logmein.gotowebinar.api.WebinarsApi;
-import com.logmein.gotowebinar.api.common.ApiException;
-import com.logmein.gotowebinar.api.model.Registrant;
-import com.logmein.gotowebinar.api.model.ReportingWebinarsResponse;
 import com.logmein.gotowebinar.api.model.Webinar;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * 
+ * {@code
+ * 
+ * {
+   "access_token":"eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJscyI6IjkwYjZmMTg4LWQ1NjItNDg3MC1hODQ1LWNiYmFhMjg0NDEwZSIsIm9nbiI6InB3ZCIsImF1ZCI6IjZkOGI1NGIwLTc4N2MtNDE4Yy1iMjBhLWUxMDA5MjQ3ZDEyNCIsInN1YiI6Ijg4OTg4NTA0OTMxNTQxOTc4ODgiLCJqdGkiOiIwMzhlYTdjOC1kZDc3LTQ0MjMtYjM2Mi0xYzQ1YzVhMzQxYTgiLCJleHAiOjE2MzUyNDEzNzgsImlhdCI6MTYzNTIzNzc3OCwidHlwIjoiYSJ9.KQ0z5m7v3yC_TF3uY0mNaqWvcGc99y5Uznfy85fI3zahDo8BDsibivi12X1sU0Dj6GciqqthUVW-CcPUFpEQUx4zIRLOq7UMTcsks2BEUVadQzLAqxWqiAzfOJoKs5XkC98CNh_RPdquaXxNJmo40Ml2eH32UxZ24vHyTFpwFyXGKARxZnQiWBY1pCFzefuaCowXfupq_bOVfLzuZbZrffF5W4DmPXehePS2Avw3Z31y0kA_0KVbVZ-7iAgsKyXFnFh485_Mu39dtmuBhFUByv0iCovJcOqxQlJtc09u4ID2rUKu_PjNf30yTXYAZlcdvjJvcIeGO1Qpcg1vbmF2sw",
+   "token_type":"Bearer",
+   "refresh_token":"eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJscyI6IjkwYjZmMTg4LWQ1NjItNDg3MC1hODQ1LWNiYmFhMjg0NDEwZSIsIm9nbiI6InB3ZCIsImF1ZCI6IjZkOGI1NGIwLTc4N2MtNDE4Yy1iMjBhLWUxMDA5MjQ3ZDEyNCIsInN1YiI6Ijg4OTg4NTA0OTMxNTQxOTc4ODgiLCJqdGkiOiJlYTI1NDYzNi1jMTgwLTQ1OTctODBkMS00OWJlYThiNDFkZGUiLCJleHAiOjE2Mzc4Mjk3NzgsImlhdCI6MTYzNTIzNzc3OCwidHlwIjoiciJ9.Q0aYIq0LNHxWllRQuUCau6z27q-ep5I0sGxo3LiwAwL6CqUPKSVmlQ4ZVDluuYtqhLRamWPxa2tgOg-LJoVHcQKv-etKq4mX7HEImEzfhlgWaq64uIHHM-pz0JlqjZCdGbMEmg1WMwQlDvQF1VD-B1OoXOleWW64qmJfb6NsCvu68q0V9st-lmheErXabfeAXNokvV5OyI0f6y0ft6MnSw6w_bvlEgQa97Bf9pcKGo6m6cOGQ-qvkVMVFU5bGKoc2Zj9CAMVlpZV2ri63OD8WE6841CS8eAvZUg1tJWLpZB_4rm_qTDncTyY39q80HmhrXeIxRVfubObmm3ItLkdaQ",
+   "expires_in":3600,
+   "account_key":"8348404185963954557",
+   "email":"info@accademiaeuropea.net",
+   "firstName":"Accademia",
+   "lastName":"Europea Soc. Coop",
+   "organizer_key":"8898850493154197888",
+   "version":"3",
+   "account_type":""
+ * 
+ * 
+ * }
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 public class DolibarrBridge {
 
+    DemoneMediator dm = null;
     final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
     final String oaut =
         "https://api.getgo.com/oauth/v2/authorize?client_id=6d8b54b0-787c-418c-b20a-e1009247d124&response_type=code&redirect_uri=https://www.accademiaeuropea.net/gotowebinar/oauth";
@@ -32,48 +50,36 @@ public class DolibarrBridge {
     // final String uri =
     // "https://localhost:8181/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
     String DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
-    String GotoWebinarKeyClient = "6d8b54b0-787c-418c-b20a-e1009247d124";
-    String GotoWebinarKeyClientSecret = "5mbvleugSuVgAg46qSrA0ueQ";
-    String authheader = "NmQ4YjU0YjAtNzg3Yy00MThjLWIyMGEtZTEwMDkyNDdkMTI0OjVtYnZsZXVnU3VWZ0FnNDZxU3JBMHVlUQ==";
-    String accesstoken =
-        "eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJscyI6IjkwYjZmMTg4LWQ1NjItNDg3MC1hODQ1LWNiYmFhMjg0NDEwZSIsIm9nbiI6InB3ZCIsImF1ZCI6IjZkOGI1NGIwLTc4N2MtNDE4Yy1iMjBhLWUxMDA5MjQ3ZDEyNCIsInN1YiI6Ijg4OTg4NTA0OTMxNTQxOTc4ODgiLCJqdGkiOiI0ZGUwMjg2Ni01YTRkLTQ2MmUtOThiMC1lYjdmNGExMDg0MWMiLCJleHAiOjE2MzUyMzQzMTQsImlhdCI6MTYzNTIzMDcxNCwidHlwIjoiYSJ9.Lnv-0Ce1Jei7JPxFcHGxkjB_PZLzxd6ZNEuVbpyfvpiAqhD9VrzH35Tfuc22HEU_NeFvduiH5DW9Ha7AtR0H3ijT7499Tk8jNgltNG66en6MFpA8M1BT9EDwauRFZPhGdoWvVdUPLVj0KSZVfqGGzEXJzJf5yn5ls0GMiX2iGmy9QoMpRvOVmtzW8RYpxYwJrEYR2jJIgvu4drgqM7-wOtJg08VIFEcujKqftH8fbNCteEnT09I-guuX4MTsvAtzY2o2bR7CgfsO5jgOCLz2lLUUckvm6ayqSggt2TP2ayOvx73xe0EdaVYxEZOhW0AISI3aeXEFzbmQcsJppVer4A";
+
+    RestTemplate restTemplate = new RestTemplate();
+
+    public DolibarrBridge(DemoneMediator demoneMediator) {
+        dm = demoneMediator;
+    }
 
     public int insertWebinar() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
 
-        RestTemplate restTemplate = new RestTemplate();
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
         headers.set("DOLAPIKEY", DolibarrKey);
-        String input = "{\"ref\":\"WEBINAR.2021.02.05\", \"label\":\"prova23234\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
 
-        HttpEntity<String> entity = new HttpEntity<String>(input, headers);
-
-        ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-        JSONArray json = null;
         try {
-            JsonParser parser = new BasicJsonParser();
+            for (Webinar m : dm.getWebinars()) {
+                String input =
+                    "{\"ref\":\"WEBINAR.2021." +
+                    m.getWebinarKey() +
+                    "\", \"label\":\"" +
+                    m.getSubject() +
+                    "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
+
+                HttpEntity<String> entity = new HttpEntity<String>(input, headers);
+
+                ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+            }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-        try {
-            RegistrantsApi registrantapi = new RegistrantsApi();
-            WebinarsApi webinarapi = new WebinarsApi();
-
-            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-            int i = 0;
-            int j = 0;
-            for (Webinar m : webinar.getEmbedded().getWebinars()) {}
-        } catch (ApiException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -82,8 +88,6 @@ public class DolibarrBridge {
 
     int getCustomers() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties?sortfield=t.rowid&sortorder=ASC";
-
-        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -108,10 +112,19 @@ public class DolibarrBridge {
         return 1;
     }
 
-    public int InsertCustomer() {
+    /**
+     * Andrea 26/10/2021 {@code
+     * leggere i dati degli iscritti dai file di Excel verificare
+     * che il contatto sia inserito
+     * se non è inserito inserirlo verificare che
+     * l'azienda sia inserita
+     * se non è inserita inserirla
+     * }
+     *
+     * @return
+     */
+    public int InsertCustomers() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
-
-        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -121,9 +134,7 @@ public class DolibarrBridge {
         // HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
         ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-        // ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.POST,
-        // entity, String.class);
-        // Object result = restTemplate.getForObject(uri, Object.class);
+
         JSONArray json = null;
         try {
             JsonParser parser = new BasicJsonParser();
@@ -138,19 +149,14 @@ public class DolibarrBridge {
     }
 
     public int getFatture() {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         headers.set("DOLAPIKEY", DolibarrKey);
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        // HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
         ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
-        // ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.POST,
-        // entity, String.class);
-        // Object result = restTemplate.getForObject(uri, Object.class);
+
         JSONArray json = null;
         try {
             JsonParser parser = new BasicJsonParser();
@@ -164,34 +170,79 @@ public class DolibarrBridge {
         return 1;
     }
 
-    String getIscritti() {
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-        try {
-            RegistrantsApi registrantapi = new RegistrantsApi();
-            WebinarsApi webinarapi = new WebinarsApi();
+    private void insertCustomer(String input, String email) {
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
 
-            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-            int i = 0;
-            int j = 0;
-            for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
-                    accesstoken,
-                    8348404185963954557L,
-                    Long.parseLong(m.getWebinarKey())
-                );
-                j++;
-                for (Registrant registrant : registrants) {
-                    i++;
-                    System.out.println(j + "." + i + ") " + registrant.getEmail());
-                }
-            }
-        } catch (ApiException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        HttpEntity<String> entity = new HttpEntity<String>(input, headers);
+
+        try {
+            if (
+                restTemplate.exchange(insertapi + "/email/" + email, HttpMethod.GET, entity, String.class).getStatusCode() == HttpStatus.OK
+            ) return;
+        } catch (RestClientException e) {
+            // contatto già presente
         }
 
-        return DolibarrKey;
+        try {
+            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+        } catch (RestClientException e) {}
+    }
+
+    private boolean customerEsiste(String email) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        try {
+            if (
+                restTemplate
+                    .exchange(
+                        "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties/email/" + email,
+                        HttpMethod.GET,
+                        entity,
+                        String.class
+                    )
+                    .getStatusCode() ==
+                HttpStatus.OK
+            ) return true;
+        } catch (RestClientException e) {
+            // contatto già presente
+        }
+        return false;
+    }
+
+    private boolean contattoEsiste(String email) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        try {
+            if (
+                restTemplate
+                    .exchange(
+                        "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts/email/" + email,
+                        HttpMethod.GET,
+                        entity,
+                        String.class
+                    )
+                    .getStatusCode() ==
+                HttpStatus.OK
+            ) return true;
+        } catch (RestClientException e) {
+            // contatto già presente
+        }
+        return false;
     }
 }
