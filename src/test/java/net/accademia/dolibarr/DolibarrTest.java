@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
  */
 public class DolibarrTest {
 
-    DolibarrBridge db = new DolibarrBridge(null);
+    DolibarrBridge db = new DolibarrBridge(new DemoneMediator());
 
     /**
      *
@@ -29,14 +29,7 @@ public class DolibarrTest {
      *
      *
      */
-    /**
-     * {@code
-     * {
-     * 	"ref":"WEBINAR.2021.02.03", "label":"prova", "status":"1", "status_buy":"1",
-     * "type":"1" }
-     *
-     * }
-     */
+
     @Test
     void insertWebinarTest() {
         assertTrue(db.insertWebinar() == 1);
@@ -49,7 +42,7 @@ public class DolibarrTest {
 
     @Test
     void InsertCustomerTest() {
-        Cliente c = new Cliente("vrtd10000n@pec.istruzione.it", "", "93014980234", Fonte.FILE);
+        Cliente c = new Cliente("vrtd10000n@pec.istruzione.it", "", "93014980234", "", Fonte.FILE);
 
         assertTrue(db.insertCustomer(c) == 1);
     }
@@ -57,6 +50,11 @@ public class DolibarrTest {
     @Test
     void getFattureTest() {
         assertTrue(db.getFatture() == 1);
+    }
+
+    @Test
+    void insertContactsTest() {
+        db.insertContact(new Contatto("adriana.pipp4o@unito.it", "", "", "80088230018", Fonte.FILE));
     }
 
     @Test
