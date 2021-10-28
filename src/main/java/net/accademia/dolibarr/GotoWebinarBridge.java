@@ -26,7 +26,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 public class GotoWebinarBridge extends DataSource {
 
-    public GotoWebinarBridge(DemoneMediator dm) {
+    public GotoWebinarBridge(AccademiaDemoneMediator dm) {
         super(dm);
         // TODO Auto-generated constructor stub
     }
@@ -163,7 +163,7 @@ public class GotoWebinarBridge extends DataSource {
             ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
 
             for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                dm.getWebinars().add(m);
+                (((AccademiaDemoneMediator) dm).getWebinars()).add(m);
             }
         } catch (ApiException e) {
             // TODO Auto-generated catch block

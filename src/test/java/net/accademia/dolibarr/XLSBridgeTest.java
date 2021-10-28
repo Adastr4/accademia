@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class XLSBridgeTest {
 
-    XLSBridge db = new XLSBridge(new DemoneMediator());
+    XLSBridge db = new XLSBridge(new AccademiaDemoneMediator());
 
     @Test
     void testReadXLS() {

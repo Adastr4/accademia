@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
  */
 public class DolibarrTest {
 
-    DolibarrBridge db = new DolibarrBridge(new DemoneMediator());
+    AccademiaDolibarrBridge db = new AccademiaDolibarrBridge(new AccademiaDemoneMediator());
 
     /**
      *

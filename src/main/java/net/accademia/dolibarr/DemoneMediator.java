@@ -5,11 +5,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DemoneMediator {
+public abstract class DemoneMediator {
 
     List<Cliente> clienti;
     List<Contatto> contatti;
-    List<Webinar> webinars;
+
     DolibarrBridge bg = null;
     GoogleSheet gs = null;
     GotoWebinarBridge gtb = null;
@@ -31,13 +31,13 @@ public class DemoneMediator {
         this.contatti = contatti;
     }
 
-    DemoneMediator() {
+    protected DemoneMediator() {
         clienti = new ArrayList<Cliente>();
         contatti = new ArrayList<Contatto>();
 
         bg = new DolibarrBridge(this);
         gs = new GoogleSheet(this);
-        gtb = new GotoWebinarBridge(this);
+
         odb = new OdsBridge(this);
     }
 
@@ -62,23 +62,7 @@ public class DemoneMediator {
         odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
         bg.InsertCustomers();
         bg.insertContacts();
-        bg.insertWebinar();
-        bg.insertInvoices();
-        return 0;
-    }
 
-    /**
-     * crea una nuova form di google inserisce i dati nel calendario crea il nuovo
-     * webinar inserisce gli iscritti su gotowebianr
-     *
-     * @return
-     */
-    int creaWebinar() {
         return 0;
-    }
-
-    public List<Webinar> getWebinars() {
-        // TODO Auto-generated method stub
-        return webinars;
     }
 }

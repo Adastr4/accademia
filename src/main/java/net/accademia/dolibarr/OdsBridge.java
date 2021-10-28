@@ -13,10 +13,13 @@ public class OdsBridge extends DataSource {
         // TODO Auto-generated constructor stub
     }
 
-    public void readODS(File file) {
+    public int readODS(File file) {
         SpreadSheet spreadsheet;
         try {
             // Getting the 0th sheet for manipulation| pass sheet name as string
+            if (dm == null) return 0;
+            if (dm.getClienti() == null) return 0;
+            if (dm.getContatti() == null) return 0;
 
             spreadsheet = SpreadSheet.createFromFile(file);
 
@@ -29,9 +32,7 @@ public class OdsBridge extends DataSource {
             for (int nRowIndex = 1; nRowIndex < nRowCount; nRowIndex++) {
                 final int currindex = nRowIndex;
                 // Iterating through each column
-                if (dm == null) continue;
-                if (dm.getClienti() == null) continue;
-                if (dm.getContatti() == null) continue;
+
                 try {
                     Cliente c = dm
                         .getClienti()
@@ -81,6 +82,7 @@ public class OdsBridge extends DataSource {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return 1;
     }
 
     private String getVat(MutableCell<SpreadSheet> cellAt) {

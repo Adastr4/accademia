@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class DemoneMediatorTest {
 
-    DemoneMediator dm = new DemoneMediator();
+    DemoneMediator dm = new AccademiaDemoneMediator();
 
     @Test
     void testSyncIscrittitoDolibarr() {

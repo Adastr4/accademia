@@ -60,35 +60,6 @@ public class DolibarrBridge extends DataSource {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public int insertWebinar() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-
-        try {
-            for (Webinar m : dm.getWebinars()) {
-                String input =
-                    "{\"ref\":\"WEBINAR.2021." +
-                    m.getWebinarKey() +
-                    "\", \"label\":\"" +
-                    m.getSubject() +
-                    "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
-
-                HttpEntity<String> entity = new HttpEntity<String>(input, headers);
-
-                ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return 1;
-    }
-
     int getCustomers() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties?sortfield=t.rowid&sortorder=ASC";
 
