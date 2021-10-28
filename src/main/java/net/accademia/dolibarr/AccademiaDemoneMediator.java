@@ -7,7 +7,6 @@ public class AccademiaDemoneMediator extends DemoneMediator {
 
     @Override
     int SyncIscrittitoDolibarr() {
-        // TODO Auto-generated method stub
         super.SyncIscrittitoDolibarr();
         ((AccademiaDolibarrBridge) bg).insertWebinar();
         bg.insertInvoices();

@@ -25,7 +25,6 @@ public class GoogleSheet extends DataSource {
 
     public GoogleSheet(DemoneMediator dm) {
         super(dm);
-        // TODO Auto-generated constructor stub
     }
 
     String idclient = "88319937008-ij2efgnkmddor000c0v77ntbsfa2feme.apps.googleusercontent.com";
@@ -68,10 +67,14 @@ public class GoogleSheet extends DataSource {
     /**
      * Prints the names and majors of students in a sample spreadsheet:
      * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+     *
+     * @param formato
      */
 
-    int getIscritti(String spreadsheetId) {
-        if (spreadsheetId == null) return 0;
+    int getIscritti(String spreadsheetId, int[] formato) {
+        if (formato == null) formato = new int[] { 13, 10, 15 };
+
+        if ((spreadsheetId == null) || (dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
         try {
             // Build a new authorized API client service.
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -83,54 +86,52 @@ public class GoogleSheet extends DataSource {
             ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
             List<List<Object>> values = response.getValues();
             if (values == null || values.isEmpty()) {
-                System.out.println("No data found.");
-            } else {
-                System.out.println("Name, Major");
-                for (List row : values) {
-                    // Print columns A and E, which correspond to indices 0 and 4.
-                    System.out.printf("%s, %s\n", row.get(0), row.get(4));
-                    if (dm == null) continue;
-                    if (dm.getClienti() == null) continue;
-                    if (dm.getContatti() == null) continue;
-                    Cliente c = dm
-                        .getClienti()
-                        .stream()
-                        .filter(cliente -> ((String) row.get(14)).equals(cliente.getmail()))
-                        .findAny()
-                        .orElse(null);
-                    if (c == null) {
-                        dm
-                            .getClienti()
-                            .add(
-                                new Cliente(
-                                    (String) row.get(14),
-                                    (String) row.get(11),
-                                    (String) row.get(15),
-                                    (String) row.get(13),
-                                    Fonte.GOOGLESHEET
-                                )
-                            );
-                    }
+                return 0;
+            }
 
-                    Contatto co = dm
+            for (List row : values) {
+                // Print columns A and E, which correspond to indices 0 and 4.
+
+                if (row.size() < 15) continue;
+                final int mailindex = formato[0];
+                Cliente c = dm
+                    .getClienti()
+                    .stream()
+                    .filter(cliente -> ((String) row.get(mailindex)).equals(cliente.getmail()))
+                    .findAny()
+                    .orElse(null);
+                if (c == null) {
+                    dm
+                        .getClienti()
+                        .add(
+                            new Cliente(
+                                (String) row.get(formato[0]),
+                                (String) row.get(formato[1]),
+                                (String) row.get(formato[2]),
+                                (String) row.get(12),
+                                Fonte.GOOGLESHEET
+                            )
+                        );
+                }
+
+                Contatto co = dm
+                    .getContatti()
+                    .stream()
+                    .filter(Contatto -> ((String) row.get(1)).equals(Contatto.getmail()))
+                    .findAny()
+                    .orElse(null);
+                if (co == null) {
+                    dm
                         .getContatti()
-                        .stream()
-                        .filter(Contatto -> ((String) row.get(1)).equals(Contatto.getmail()))
-                        .findAny()
-                        .orElse(null);
-                    if (co == null) {
-                        dm
-                            .getContatti()
-                            .add(
-                                new Contatto(
-                                    (String) row.get(1),
-                                    (String) row.get(2),
-                                    (String) row.get(3),
-                                    (String) row.get(15),
-                                    Fonte.GOOGLESHEET
-                                )
-                            );
-                    }
+                        .add(
+                            new Contatto(
+                                (String) row.get(1),
+                                (String) row.get(2),
+                                (String) row.get(3),
+                                (String) row.get(15),
+                                Fonte.GOOGLESHEET
+                            )
+                        );
                 }
             }
         } catch (GeneralSecurityException e) {

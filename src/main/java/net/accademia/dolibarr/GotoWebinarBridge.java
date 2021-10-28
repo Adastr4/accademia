@@ -85,7 +85,7 @@ public class GotoWebinarBridge extends DataSource {
                             .getContatti()
                             .add(
                                 new Contatto(
-                                    (String) registrant.getEmail(),
+                                    registrant.getEmail(),
                                     registrant.getLastName(),
                                     registrant.getFirstName(),
                                     "",

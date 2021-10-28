@@ -1,7 +1,6 @@
 package net.accademia.dolibarr;
 
 import com.google.gson.Gson;
-import com.logmein.gotowebinar.api.model.Webinar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +17,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 
+ *
  * {@code
- * 
+ *
  * {
    "access_token":"eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJscyI6IjkwYjZmMTg4LWQ1NjItNDg3MC1hODQ1LWNiYmFhMjg0NDEwZSIsIm9nbiI6InB3ZCIsImF1ZCI6IjZkOGI1NGIwLTc4N2MtNDE4Yy1iMjBhLWUxMDA5MjQ3ZDEyNCIsInN1YiI6Ijg4OTg4NTA0OTMxNTQxOTc4ODgiLCJqdGkiOiIwMzhlYTdjOC1kZDc3LTQ0MjMtYjM2Mi0xYzQ1YzVhMzQxYTgiLCJleHAiOjE2MzUyNDEzNzgsImlhdCI6MTYzNTIzNzc3OCwidHlwIjoiYSJ9.KQ0z5m7v3yC_TF3uY0mNaqWvcGc99y5Uznfy85fI3zahDo8BDsibivi12X1sU0Dj6GciqqthUVW-CcPUFpEQUx4zIRLOq7UMTcsks2BEUVadQzLAqxWqiAzfOJoKs5XkC98CNh_RPdquaXxNJmo40Ml2eH32UxZ24vHyTFpwFyXGKARxZnQiWBY1pCFzefuaCowXfupq_bOVfLzuZbZrffF5W4DmPXehePS2Avw3Z31y0kA_0KVbVZ-7iAgsKyXFnFh485_Mu39dtmuBhFUByv0iCovJcOqxQlJtc09u4ID2rUKu_PjNf30yTXYAZlcdvjJvcIeGO1Qpcg1vbmF2sw",
    "token_type":"Bearer",
@@ -33,15 +32,15 @@ import org.springframework.web.client.RestTemplate;
    "organizer_key":"8898850493154197888",
    "version":"3",
    "account_type":""
- * 
- * 
+ *
+ *
  * }
- * 
- * 
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
+ *
+ *
  */
 public class DolibarrBridge extends DataSource {
 
@@ -67,7 +66,7 @@ public class DolibarrBridge extends DataSource {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         headers.set("DOLAPIKEY", DolibarrKey);
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         // HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
         ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
@@ -114,7 +113,7 @@ public class DolibarrBridge extends DataSource {
 
         headers.set("DOLAPIKEY", DolibarrKey);
 
-        HttpEntity<String> entity = new HttpEntity<String>(cliente.getJson(), headers);
+        HttpEntity<String> entity = new HttpEntity<>(cliente.getJson(), headers);
         try {
             if (
                 restTemplate
@@ -149,7 +148,7 @@ public class DolibarrBridge extends DataSource {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         headers.set("DOLAPIKEY", DolibarrKey);
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
 
@@ -190,7 +189,7 @@ public class DolibarrBridge extends DataSource {
 
         headers.set("DOLAPIKEY", DolibarrKey);
 
-        HttpEntity<String> entity = new HttpEntity<String>(c.getJson(), headers);
+        HttpEntity<String> entity = new HttpEntity<>(c.getJson(), headers);
         ResponseEntity<String> ret = null;
         String jsonString = c.getJson();
         /**
@@ -205,7 +204,7 @@ public class DolibarrBridge extends DataSource {
             Gson gson = new Gson();
             jsonString = gson.toJson(json);
         }
-        entity = new HttpEntity<String>(jsonString, headers);
+        entity = new HttpEntity<>(jsonString, headers);
         try {
             ret =
                 restTemplate.exchange(
@@ -236,8 +235,7 @@ public class DolibarrBridge extends DataSource {
     }
 
     private String getClienteID(String piva) {
-        if (piva == null) return null;
-        if (piva == "") return null;
+        if ((piva == null) || (piva == "")) return null;
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
 
         HttpHeaders headers = new HttpHeaders();
@@ -246,7 +244,7 @@ public class DolibarrBridge extends DataSource {
 
         headers.set("DOLAPIKEY", DolibarrKey);
 
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         List json = null;
         try {
             ResponseEntity<String> ret = restTemplate.exchange(

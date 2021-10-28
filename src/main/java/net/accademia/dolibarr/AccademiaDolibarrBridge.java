@@ -32,7 +32,7 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
                     m.getSubject() +
                     "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
 
-                HttpEntity<String> entity = new HttpEntity<String>(input, headers);
+                HttpEntity<String> entity = new HttpEntity<>(input, headers);
 
                 ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
             }

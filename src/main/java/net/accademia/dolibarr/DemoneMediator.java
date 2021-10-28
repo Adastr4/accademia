@@ -1,6 +1,5 @@
 package net.accademia.dolibarr;
 
-import com.logmein.gotowebinar.api.model.Webinar;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +13,7 @@ public abstract class DemoneMediator {
     GoogleSheet gs = null;
     GotoWebinarBridge gtb = null;
     OdsBridge odb = null;
+    XLSBridge xb = null;
 
     public List<Cliente> getClienti() {
         return clienti;
@@ -32,13 +32,14 @@ public abstract class DemoneMediator {
     }
 
     protected DemoneMediator() {
-        clienti = new ArrayList<Cliente>();
-        contatti = new ArrayList<Contatto>();
+        clienti = new ArrayList<>();
+        contatti = new ArrayList<>();
 
         bg = new DolibarrBridge(this);
         gs = new GoogleSheet(this);
 
         odb = new OdsBridge(this);
+        xb = new XLSBridge(this);
     }
 
     /**
@@ -48,18 +49,42 @@ public abstract class DemoneMediator {
      * @return
      */
     int SyncIscrittitoDolibarr() {
+        /**
+         * Prima i dati legacy
+         *
+         * */
+        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
+        xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
+
+        /**
+         * Poi i dati dei form di Google
+         *
+         * */
+
         String[] iscritti = {
-            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
-            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
+            "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
+            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
+            "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w",
+            "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
+            "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
+            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
         };
-        for (int i = 0; i < iscritti.length; i++) {
-            gs.getIscritti(iscritti[i]);
+        for (String element : iscritti) {
+            gs.getIscritti(element, null);
         }
 
+        String[] iscrittiv2 = { "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
+        int formato[] = { 12, 10, 15 };
+        for (String element : iscrittiv2) {
+            gs.getIscritti(element, formato);
+        }
+
+        /**
+         * Poi i dati di goto webinar
+         * */
         gtb.getIscritti();
 
-        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
         bg.InsertCustomers();
         bg.insertContacts();
 

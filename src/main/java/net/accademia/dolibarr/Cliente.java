@@ -14,6 +14,7 @@ public class Cliente extends Contatto {
         return piva;
     }
 
+    @Override
     public String getJson() {
         return (
             "{\"name\": \"" +

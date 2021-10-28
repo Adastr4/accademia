@@ -29,9 +29,7 @@ public class XLSBridge extends DataSource {
 
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
-            if (dm == null) return 0;
-            if (dm.getClienti() == null) return 0;
-            if (dm.getContatti() == null) return 0;
+            if ((dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
             boolean intestazione = true;
             while (rowIterator.hasNext()) {
                 if (intestazione) {

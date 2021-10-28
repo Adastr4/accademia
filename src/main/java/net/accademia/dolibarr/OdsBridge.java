@@ -17,9 +17,7 @@ public class OdsBridge extends DataSource {
         SpreadSheet spreadsheet;
         try {
             // Getting the 0th sheet for manipulation| pass sheet name as string
-            if (dm == null) return 0;
-            if (dm.getClienti() == null) return 0;
-            if (dm.getContatti() == null) return 0;
+            if ((dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
 
             spreadsheet = SpreadSheet.createFromFile(file);
 
@@ -37,7 +35,7 @@ public class OdsBridge extends DataSource {
                     Cliente c = dm
                         .getClienti()
                         .stream()
-                        .filter(cliente -> ((String) spreadsheet.getSheet(0).getCellAt(11, currindex).getValue()).equals(cliente.getmail()))
+                        .filter(cliente -> getVat(spreadsheet.getSheet(0).getCellAt(11, currindex)).equals(cliente.getmail()))
                         .findAny()
                         .orElse(null);
                     if (c == null) {
@@ -45,10 +43,10 @@ public class OdsBridge extends DataSource {
                             .getClienti()
                             .add(
                                 new Cliente(
-                                    (String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue(),
-                                    ((String) spreadsheet.getSheet(0).getCellAt(8, nRowIndex).getValue()).replace('\"', '\''),
+                                    getVat(spreadsheet.getSheet(0).getCellAt(11, nRowIndex)),
+                                    getVat(spreadsheet.getSheet(0).getCellAt(8, nRowIndex)).replace('\"', '\''),
                                     getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
-                                    "",
+                                    getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
                                     Fonte.FILE
                                 )
                             );
@@ -69,7 +67,7 @@ public class OdsBridge extends DataSource {
                                     (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
-                                    "",
+                                    getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
                                     Fonte.FILE
                                 )
                             );

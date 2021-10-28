@@ -10,6 +10,8 @@ class GoogleSheetTest {
 
     @Test
     void testGetIscritti() {
-        gs.getIscritti("1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ");
+        String[] iscrittiv2 = { "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
+        int formato[] = { 12, 10, 15 };
+        gs.getIscritti(iscrittiv2[0], formato);
     }
 }
