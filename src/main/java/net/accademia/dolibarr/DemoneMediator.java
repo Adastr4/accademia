@@ -62,6 +62,8 @@ public class DemoneMediator {
         odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
         bg.InsertCustomers();
         bg.insertContacts();
+        bg.insertWebinar();
+        bg.insertInvoices();
         return 0;
     }
 

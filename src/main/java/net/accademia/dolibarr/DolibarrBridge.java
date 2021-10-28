@@ -1,7 +1,10 @@
 package net.accademia.dolibarr;
 
+import com.google.gson.Gson;
 import com.logmein.gotowebinar.api.model.Webinar;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
@@ -40,9 +43,13 @@ import org.springframework.web.client.RestTemplate;
  * 
  * 
  */
-public class DolibarrBridge {
+public class DolibarrBridge extends DataSource {
 
-    DemoneMediator dm = null;
+    public DolibarrBridge(DemoneMediator dm) {
+        super(dm);
+        // TODO Auto-generated constructor stub
+    }
+
     final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
     final String oaut =
         "https://api.getgo.com/oauth/v2/authorize?client_id=6d8b54b0-787c-418c-b20a-e1009247d124&response_type=code&redirect_uri=https://www.accademiaeuropea.net/gotowebinar/oauth";
@@ -52,10 +59,6 @@ public class DolibarrBridge {
     String DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
 
     RestTemplate restTemplate = new RestTemplate();
-
-    public DolibarrBridge(DemoneMediator demoneMediator) {
-        dm = demoneMediator;
-    }
 
     public int insertWebinar() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
@@ -169,6 +172,8 @@ public class DolibarrBridge {
     }
 
     public int getFatture() {
+        final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
@@ -190,58 +195,6 @@ public class DolibarrBridge {
         return 1;
     }
 
-    private boolean customerEsiste(String email) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        try {
-            if (
-                restTemplate
-                    .exchange(
-                        "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties/email/" + email,
-                        HttpMethod.GET,
-                        entity,
-                        String.class
-                    )
-                    .getStatusCode() ==
-                HttpStatus.OK
-            ) return true;
-        } catch (RestClientException e) {
-            // contatto già presente
-        }
-        return false;
-    }
-
-    private boolean contattoEsiste(String email) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        try {
-            if (
-                restTemplate
-                    .exchange(
-                        "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts/email/" + email,
-                        HttpMethod.GET,
-                        entity,
-                        String.class
-                    )
-                    .getStatusCode() ==
-                HttpStatus.OK
-            ) return true;
-        } catch (RestClientException e) {
-            // contatto già presente
-        }
-        return false;
-    }
-
     public int insertContacts() {
         dm.getContatti();
         for (Contatto c : dm.getContatti()) {
@@ -250,7 +203,14 @@ public class DolibarrBridge {
         return 1;
     }
 
-    private int insertContact(Contatto c) {
+    /**
+     * se il contatto non esiste lo inserisce controlla che ci sia il cliente e in
+     * caso lo associa se il contatto esiste e il cliente esiste allora lo associa
+     *
+     * @param c
+     * @return
+     */
+    int insertContact(Contatto c) {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts";
 
         HttpHeaders headers = new HttpHeaders();
@@ -260,25 +220,118 @@ public class DolibarrBridge {
         headers.set("DOLAPIKEY", DolibarrKey);
 
         HttpEntity<String> entity = new HttpEntity<String>(c.getJson(), headers);
-        try {
-            if (
-                restTemplate
-                    .exchange(
-                        insertapi + "?sqlfilters=((t.lastname:like:'" + c.getLastname() + "%') and (t.email:like:'" + c.getmail() + "%'))",
-                        HttpMethod.GET,
-                        entity,
-                        String.class
-                    )
-                    .getStatusCode() ==
-                HttpStatus.OK
-            ) return 1;
-        } catch (RestClientException e) {
-            // contatto già presente
+        ResponseEntity<String> ret = null;
+        String jsonString = c.getJson();
+        /**
+         * Associa il contatto al cliente
+         */
+        JsonParser parser = new BasicJsonParser();
+        Map json = parser.parseMap(c.getJson());
+        String cid = getClienteID(c.getPiva());
+        if (cid != null) {
+            json.put("socid", cid);
+            json.put("fk_soc", cid);
+            Gson gson = new Gson();
+            jsonString = gson.toJson(json);
         }
-
+        entity = new HttpEntity<String>(jsonString, headers);
         try {
-            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-        } catch (RestClientException e) {}
+            ret =
+                restTemplate.exchange(
+                    insertapi + "?sqlfilters=((t.lastname:like:'" + c.getLastname() + "%') and (t.email:like:'" + c.getmail() + "%'))",
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+                );
+            if (cid == null) return 1; // inuitle proseguire se il cliente non c'è
+            if (ret.getStatusCode() == HttpStatus.OK) {
+                List jsonl = parser.parseList(ret.getBody());
+                String conid = (String) ((Map) jsonl.get(0)).get("id");
+
+                ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);
+                return 1;
+            }
+        } catch (RestClientException e) {
+            // contatto non presente
+        }
+        try {
+            ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+        }
+        return 0;
+        // TODO Auto-generated method stub
+
+    }
+
+    private String getClienteID(String piva) {
+        if (piva == null) return null;
+        if (piva == "") return null;
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        List json = null;
+        try {
+            ResponseEntity<String> ret = restTemplate.exchange(
+                insertapi + "?sqlfilters=(t.tva_intra:like:'" + piva + "%')",
+                HttpMethod.GET,
+                entity,
+                String.class
+            );
+
+            if (ret.getStatusCode() != HttpStatus.OK) return null;
+            JsonParser parser = new BasicJsonParser();
+            json = parser.parseList(ret.getBody());
+            return (String) ((Map) json.get(0)).get("ref");
+        } catch (RestClientException e) {
+            // contatto non presente
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Per tutti gli iscritti al webinar dai form on line, inserire fattura alla
+     * loro azienda
+     *
+     *
+     * inserisci la fattura
+     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices
+     * {@code
+     *
+     *       "socid": "574",
+     *       "type": "0",
+     *       "date": 1614639600,
+     *       "paye": "1"
+     *       }
+     *
+     *
+     * inserisci la linea
+     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
+     *
+     * {@code
+     * { "ref": "WEBINAR.2021.1019932687784993804", "qty": "1", "fk_product": "12" }
+     * }
+     *
+     * validi la fattura
+     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
+     */
+
+    public int insertInvoices() {
+        dm.getContatti();
+        for (Contatto c : dm.getContatti()) {
+            insertInvoice(new Invoice(c));
+        }
+        return 1;
+    }
+
+    int insertInvoice(Invoice invoice) {
         return 0;
         // TODO Auto-generated method stub
 

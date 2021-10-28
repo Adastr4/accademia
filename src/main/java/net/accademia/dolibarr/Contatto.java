@@ -2,6 +2,10 @@ package net.accademia.dolibarr;
 
 public class Contatto {
 
+    public String getPiva() {
+        return piva;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -10,17 +14,19 @@ public class Contatto {
         return lastname;
     }
 
+    protected String piva;
     protected Fonte f;
     protected String firstname;
     protected String lastname;
 
     String _mail;
 
-    Contatto(String mail, String firstname, String lastname, Fonte f) {
+    Contatto(String mail, String firstname, String lastname, String piva, Fonte f) {
         _mail = mail;
         this.f = f;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.piva = piva;
     }
 
     public String getJson() {

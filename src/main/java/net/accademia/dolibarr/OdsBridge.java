@@ -6,12 +6,11 @@ import java.math.BigDecimal;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
-public class OdsBridge {
+public class OdsBridge extends DataSource {
 
-    DemoneMediator dm;
-
-    public OdsBridge(DemoneMediator demoneMediator) {
-        dm = demoneMediator;
+    public OdsBridge(DemoneMediator dm) {
+        super(dm);
+        // TODO Auto-generated constructor stub
     }
 
     public void readODS(File file) {
@@ -48,6 +47,7 @@ public class OdsBridge {
                                     (String) spreadsheet.getSheet(0).getCellAt(11, nRowIndex).getValue(),
                                     ((String) spreadsheet.getSheet(0).getCellAt(8, nRowIndex).getValue()).replace('\"', '\''),
                                     getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
+                                    "",
                                     Fonte.FILE
                                 )
                             );
@@ -68,6 +68,7 @@ public class OdsBridge {
                                     (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
+                                    "",
                                     Fonte.FILE
                                 )
                             );

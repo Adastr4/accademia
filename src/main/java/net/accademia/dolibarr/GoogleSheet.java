@@ -21,9 +21,12 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GoogleSheet {
+public class GoogleSheet extends DataSource {
 
-    DemoneMediator dm = null;
+    public GoogleSheet(DemoneMediator dm) {
+        super(dm);
+        // TODO Auto-generated constructor stub
+    }
 
     String idclient = "88319937008-ij2efgnkmddor000c0v77ntbsfa2feme.apps.googleusercontent.com";
     String clientsecret = "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";
@@ -37,10 +40,6 @@ public class GoogleSheet {
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-
-    public GoogleSheet(DemoneMediator demoneMediator) {
-        dm = demoneMediator;
-    }
 
     /**
      * Creates an authorized Credential object.
@@ -96,25 +95,41 @@ public class GoogleSheet {
                     Cliente c = dm
                         .getClienti()
                         .stream()
-                        .filter(cliente -> ((String) row.get(4)).equals(cliente.getmail()))
+                        .filter(cliente -> ((String) row.get(14)).equals(cliente.getmail()))
                         .findAny()
                         .orElse(null);
                     if (c == null) {
                         dm
                             .getClienti()
-                            .add(new Cliente((String) row.get(14), (String) row.get(11), (String) row.get(15), Fonte.GOOGLESHEET));
+                            .add(
+                                new Cliente(
+                                    (String) row.get(14),
+                                    (String) row.get(11),
+                                    (String) row.get(15),
+                                    (String) row.get(13),
+                                    Fonte.GOOGLESHEET
+                                )
+                            );
                     }
 
                     Contatto co = dm
                         .getContatti()
                         .stream()
-                        .filter(Contatto -> ((String) row.get(4)).equals(Contatto.getmail()))
+                        .filter(Contatto -> ((String) row.get(1)).equals(Contatto.getmail()))
                         .findAny()
                         .orElse(null);
                     if (co == null) {
                         dm
                             .getContatti()
-                            .add(new Contatto((String) row.get(1), (String) row.get(2), (String) row.get(3), Fonte.GOOGLESHEET));
+                            .add(
+                                new Contatto(
+                                    (String) row.get(1),
+                                    (String) row.get(2),
+                                    (String) row.get(3),
+                                    (String) row.get(15),
+                                    Fonte.GOOGLESHEET
+                                )
+                            );
                     }
                 }
             }

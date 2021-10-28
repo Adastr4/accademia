@@ -2,14 +2,16 @@ package net.accademia.dolibarr;
 
 public class Cliente extends Contatto {
 
-    Cliente(String mail, String firstname, String vat, Fonte f) {
-        super(mail, firstname, vat, f);
-        // TODO Auto-generated constructor stub
+    String codiceunivoco;
+
+    Cliente(String mail, String firstname, String vat, String cu, Fonte f) {
+        super(mail, firstname, "", vat, f);
+        codiceunivoco = cu;
     }
 
     public String getVat() {
         // TODO Auto-generated method stub
-        return lastname;
+        return piva;
     }
 
     public String getJson() {
