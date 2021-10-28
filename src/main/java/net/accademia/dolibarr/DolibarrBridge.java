@@ -42,7 +42,7 @@ import org.springframework.web.client.RestTemplate;
  *
  *
  */
-public class DolibarrBridge extends DataSource {
+public abstract class DolibarrBridge extends DataSource {
 
     public DolibarrBridge(DemoneMediator dm) {
         super(dm);
@@ -196,7 +196,7 @@ public class DolibarrBridge extends DataSource {
          * Associa il contatto al cliente
          */
         JsonParser parser = new BasicJsonParser();
-        Map json = parser.parseMap(c.getJson());
+        Map<String, Object> json = parser.parseMap(c.getJson());
         String cid = getClienteID(c.getPiva());
         if (cid != null) {
             json.put("socid", cid);
@@ -216,7 +216,7 @@ public class DolibarrBridge extends DataSource {
             if (cid == null) return 1; // inuitle proseguire se il cliente non c'è
             if (ret.getStatusCode() == HttpStatus.OK) {
                 List jsonl = parser.parseList(ret.getBody());
-                String conid = (String) ((Map) jsonl.get(0)).get("id");
+                String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("id");
 
                 ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);
                 return 1;
@@ -257,7 +257,7 @@ public class DolibarrBridge extends DataSource {
             if (ret.getStatusCode() != HttpStatus.OK) return null;
             JsonParser parser = new BasicJsonParser();
             json = parser.parseList(ret.getBody());
-            return (String) ((Map) json.get(0)).get("ref");
+            return (String) ((Map<?, ?>) json.get(0)).get("ref");
         } catch (RestClientException e) {
             // contatto non presente
             e.printStackTrace();
@@ -265,44 +265,9 @@ public class DolibarrBridge extends DataSource {
         return null;
     }
 
-    /**
-     * Per tutti gli iscritti al webinar dai form on line, inserire fattura alla
-     * loro azienda
-     *
-     *
-     * inserisci la fattura
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices
-     * {@code
-     *
-     *       "socid": "574",
-     *       "type": "0",
-     *       "date": 1614639600,
-     *       "paye": "1"
-     *       }
-     *
-     *
-     * inserisci la linea
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
-     *
-     * {@code
-     * { "ref": "WEBINAR.2021.1019932687784993804", "qty": "1", "fk_product": "12" }
-     * }
-     *
-     * validi la fattura
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
-     */
-
-    public int insertInvoices() {
-        dm.getContatti();
-        for (Contatto c : dm.getContatti()) {
-            insertInvoice(new Invoice(c));
-        }
-        return 1;
-    }
+    public abstract int insertInvoices();
 
     int insertInvoice(Invoice invoice) {
         return 0;
-        // TODO Auto-generated method stub
-
     }
 }

@@ -8,4 +8,10 @@ public class CARTDemoneMediator extends DemoneMediator {
         super();
         // TODO Auto-generated constructor stub
     }
+
+    @Override
+    public int insertInvoices() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

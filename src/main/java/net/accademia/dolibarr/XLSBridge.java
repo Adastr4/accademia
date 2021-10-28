@@ -94,6 +94,7 @@ public class XLSBridge extends DataSource {
                 }
             }
             file.close();
+            workbook.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -72,7 +72,7 @@ public class GoogleSheet extends DataSource {
      */
 
     int getIscritti(String spreadsheetId, int[] formato) {
-        if (formato == null) formato = new int[] { 13, 10, 15 };
+        if (formato == null) formato = new int[] { 13, 10, 15, 12 };
 
         if ((spreadsheetId == null) || (dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
         try {
@@ -108,7 +108,7 @@ public class GoogleSheet extends DataSource {
                                 (String) row.get(formato[0]),
                                 (String) row.get(formato[1]),
                                 (String) row.get(formato[2]),
-                                (String) row.get(12),
+                                (String) row.get(formato[3]),
                                 Fonte.GOOGLESHEET
                             )
                         );
@@ -128,7 +128,7 @@ public class GoogleSheet extends DataSource {
                                 (String) row.get(1),
                                 (String) row.get(2),
                                 (String) row.get(3),
-                                (String) row.get(15),
+                                (String) row.get(formato[2]),
                                 Fonte.GOOGLESHEET
                             )
                         );

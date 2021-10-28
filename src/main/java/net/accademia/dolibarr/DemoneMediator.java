@@ -6,13 +6,18 @@ import java.util.List;
 
 public abstract class DemoneMediator {
 
-    List<Cliente> clienti;
-    List<Contatto> contatti;
+    protected List<Cliente> clienti;
+    protected List<Contatto> contatti;
+    protected List<Invoice> fatture;
+    protected DolibarrBridge bg = null;
+    protected GoogleSheet gs = null;
+    protected GotoWebinarBridge gtb = null;
+    protected OdsBridge odb = null;
 
-    DolibarrBridge bg = null;
-    GoogleSheet gs = null;
-    GotoWebinarBridge gtb = null;
-    OdsBridge odb = null;
+    public List<Invoice> getFatture() {
+        return fatture;
+    }
+
     XLSBridge xb = null;
 
     public List<Cliente> getClienti() {
@@ -34,8 +39,7 @@ public abstract class DemoneMediator {
     protected DemoneMediator() {
         clienti = new ArrayList<>();
         contatti = new ArrayList<>();
-
-        bg = new DolibarrBridge(this);
+        fatture = new ArrayList<Invoice>();
         gs = new GoogleSheet(this);
 
         odb = new OdsBridge(this);
@@ -52,14 +56,14 @@ public abstract class DemoneMediator {
         /**
          * Prima i dati legacy
          *
-         * */
+         */
         odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
         xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
 
         /**
          * Poi i dati dei form di Google
          *
-         * */
+         */
 
         String[] iscritti = {
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
@@ -75,14 +79,14 @@ public abstract class DemoneMediator {
         }
 
         String[] iscrittiv2 = { "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
-        int formato[] = { 12, 10, 15 };
+        int formato[] = { 14, 11, 15, 13 }; // sono cambiate le colonne del fil e di goobgle
         for (String element : iscrittiv2) {
             gs.getIscritti(element, formato);
         }
 
         /**
          * Poi i dati di goto webinar
-         * */
+         */
         gtb.getIscritti();
 
         bg.InsertCustomers();
@@ -90,4 +94,6 @@ public abstract class DemoneMediator {
 
         return 0;
     }
+
+    public abstract int insertInvoices();
 }

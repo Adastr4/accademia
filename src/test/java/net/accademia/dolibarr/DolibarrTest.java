@@ -2,6 +2,7 @@ package net.accademia.dolibarr;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.logmein.gotowebinar.api.model.Webinar;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -19,7 +20,8 @@ import org.junit.jupiter.api.Test;
  */
 public class DolibarrTest {
 
-    AccademiaDolibarrBridge db = new AccademiaDolibarrBridge(new AccademiaDemoneMediator());
+    AccademiaDemoneMediator am = new AccademiaDemoneMediatorMock();
+    AccademiaDolibarrBridge db = new AccademiaDolibarrBridge(am);
 
     /**
      *
@@ -57,5 +59,13 @@ public class DolibarrTest {
     }
 
     @Test
-    void readIscrizioni() {}
+    void insertInvoicesTest() {
+        for (int i = 0; i < 10; i++) {
+            Webinar we = new Webinar();
+            we.setWebinarKey("123" + i + ".prova");
+            am.getWebinars().add(we);
+        }
+
+        am.insertInvoices();
+    }
 }

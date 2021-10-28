@@ -1,6 +1,9 @@
 package net.accademia.dolibarr;
 
+import com.logmein.gotowebinar.api.common.ApiException;
+import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccademiaDemoneMediator extends DemoneMediator {
@@ -13,10 +16,9 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         return 1;
     }
 
-    List<Webinar> webinars;
+    List<Webinar> webinars = new ArrayList<Webinar>();
 
     public List<Webinar> getWebinars() {
-        // TODO Auto-generated method stub
         return webinars;
     }
 
@@ -34,5 +36,14 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         super();
         bg = new AccademiaDolibarrBridge(this);
         gtb = new GotoWebinarBridge(this);
+    }
+
+    public List<Registrant> getAllRegistrantsForWebinar(String webinarKey) throws ApiException {
+        return gtb.getAllRegistrantsForWebinar(webinarKey);
+    }
+
+    public int insertInvoices() {
+        gtb.getWebinars();
+        return bg.insertInvoices();
     }
 }
