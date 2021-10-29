@@ -22,4 +22,9 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
             r.add(re);
         }
     }
+
+    public void fillWebinars() {
+        gtb.getWebinars();
+        ((AccademiaDolibarrBridge) bg).insertWebinar();
+    }
 }

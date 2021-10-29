@@ -22,40 +22,4 @@ public class AccademiaDolibarrBridgeMock extends AccademiaDolibarrBridge {
         super(dm);
         // TODO Auto-generated constructor stub
     }
-
-    public void deleteInvoices() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-
-        try {
-            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
-
-            List json = new ArrayList();
-
-            try {
-                Type listType = new TypeToken<List<Object>>() {}.getType();
-
-                List<Object> yourList = new Gson().fromJson(ret.getBody(), listType);
-
-                for (Object map : yourList) {
-                    String id = (String) ((Map) map).get("id");
-                    if (id.equalsIgnoreCase("5")) continue;
-
-                    ret = restTemplate.exchange(insertapi + "/" + id, HttpMethod.DELETE, entity, String.class);
-                }
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 }

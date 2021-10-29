@@ -9,11 +9,6 @@ public class Cliente extends Contatto {
         codiceunivoco = cu;
     }
 
-    public String getVat() {
-        // TODO Auto-generated method stub
-        return piva;
-    }
-
     @Override
     public String getJson() {
         return (
@@ -25,5 +20,10 @@ public class Cliente extends Contatto {
             getVat() +
             "\"}"
         );
+    }
+
+    public String getVat() {
+        // TODO Auto-generated method stub
+        return piva;
     }
 }

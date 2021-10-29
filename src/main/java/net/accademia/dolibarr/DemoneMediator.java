@@ -14,27 +14,7 @@ public abstract class DemoneMediator {
     protected GotoWebinarBridge gtb = null;
     protected OdsBridge odb = null;
 
-    public List<Invoice> getFatture() {
-        return fatture;
-    }
-
     XLSBridge xb = null;
-
-    public List<Cliente> getClienti() {
-        return clienti;
-    }
-
-    public void setClienti(List<Cliente> clienti) {
-        this.clienti = clienti;
-    }
-
-    public List<Contatto> getContatti() {
-        return contatti;
-    }
-
-    public void setContatti(List<Contatto> contatti) {
-        this.contatti = contatti;
-    }
 
     protected DemoneMediator() {
         clienti = new ArrayList<>();
@@ -44,6 +24,28 @@ public abstract class DemoneMediator {
 
         odb = new OdsBridge(this);
         xb = new XLSBridge(this);
+    }
+
+    public List<Cliente> getClienti() {
+        return clienti;
+    }
+
+    public List<Contatto> getContatti() {
+        return contatti;
+    }
+
+    public List<Invoice> getFatture() {
+        return fatture;
+    }
+
+    public abstract int insertInvoices();
+
+    public void setClienti(List<Cliente> clienti) {
+        this.clienti = clienti;
+    }
+
+    public void setContatti(List<Contatto> contatti) {
+        this.contatti = contatti;
     }
 
     /**
@@ -94,6 +96,4 @@ public abstract class DemoneMediator {
 
         return 0;
     }
-
-    public abstract int insertInvoices();
 }

@@ -13,6 +13,12 @@ public class OdsBridge extends DataSource {
         // TODO Auto-generated constructor stub
     }
 
+    private String getVat(MutableCell<SpreadSheet> cellAt) {
+        if (cellAt.getValue() instanceof String) return (String) cellAt.getValue();
+        if (cellAt.getValue() instanceof BigDecimal) return ((BigDecimal) cellAt.getValue()).toPlainString();
+        return null;
+    }
+
     public int readODS(File file) {
         SpreadSheet spreadsheet;
         try {
@@ -81,11 +87,5 @@ public class OdsBridge extends DataSource {
             e.printStackTrace();
         }
         return 1;
-    }
-
-    private String getVat(MutableCell<SpreadSheet> cellAt) {
-        if (cellAt.getValue() instanceof String) return (String) cellAt.getValue();
-        if (cellAt.getValue() instanceof BigDecimal) return ((BigDecimal) cellAt.getValue()).toPlainString();
-        return null;
     }
 }

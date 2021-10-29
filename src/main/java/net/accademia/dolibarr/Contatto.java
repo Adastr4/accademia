@@ -2,23 +2,13 @@ package net.accademia.dolibarr;
 
 public class Contatto {
 
-    public String getPiva() {
-        return piva;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
     protected String piva;
-    protected Fonte f;
-    protected String firstname;
-    protected String lastname;
 
+    protected Fonte f;
+
+    protected String firstname;
+
+    protected String lastname;
     String _mail;
 
     Contatto(String mail, String firstname, String lastname, String piva, Fonte f) {
@@ -29,13 +19,25 @@ public class Contatto {
         this.piva = piva;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
+
     public String getJson() {
         // TODO Auto-generated method stub
         return "{\"lastname\":\"" + lastname + "\", \"firstname\":\"" + firstname + "\", \"email\":\"" + _mail + "\"}";
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
     public String getmail() {
         // TODO Auto-generated method stub
         return _mail;
+    }
+
+    public String getPiva() {
+        return piva;
     }
 }

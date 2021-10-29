@@ -26,12 +26,8 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 public class GotoWebinarBridge extends DataSource {
 
-    public GotoWebinarBridge(AccademiaDemoneMediator dm) {
-        super(dm);
-        // TODO Auto-generated constructor stub
-    }
-
     String GotoWebinarKeyClient = "6d8b54b0-787c-418c-b20a-e1009247d124";
+
     String GotoWebinarKeyClientSecret = "5mbvleugSuVgAg46qSrA0ueQ";
     String authheader = "NmQ4YjU0YjAtNzg3Yy00MThjLWIyMGEtZTEwMDkyNDdkMTI0OjVtYnZsZXVnU3VWZ0FnNDZxU3JBMHVlUQ==";
     // String refreshtoken =
@@ -42,136 +38,9 @@ public class GotoWebinarBridge extends DataSource {
         "eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJvZ24iOiJwd2QiLCJhdWQiOiI2ZDhiNTRiMC03ODdjLTQxOGMtYjIwYS1lMTAwOTI0N2QxMjQiLCJzdWIiOiI4ODk4ODUwNDkzMTU0MTk3ODg4IiwianRpIjoiZDE4YTgxNjUtMTBmNy00NzM0LWJmMjMtNzRjZTk0MmE4MDMzIiwiZXhwIjoxNjM1Mjc2MTUzLCJpYXQiOjE2MzUyNzI1NTMsInR5cCI6ImEifQ.dII63cG1UMiSCnR4HOs_DfxNwzbvA-I4A0FQ-te0bqBBhe0Yy6zYrrCfKgb_jVq0VbzphkOIpLV0PSPMLqXlL68b7ho5kZsRdWCCELt1WNoeRzP2pYCJMiLFUNeH0f8mlPZJjGJmakl6WbTag3Lqak9Ygrc5965_nPNkhM-C6BT0V5JL2K6ApuldQNAMLywaliBE2gz61j1dm-Ori3g3VrQZeAhrClkeanwzJvsgiczUpMcyTjlnOco9ugU753kuB3KxWW76lWMHOZeAfd7zuI3Ut7xRtLg6RnE-onYHJQNJOCpjZzvZ6Ex-02vxkt8XJe1KlNO18NWcmKXFkd7Clg";
     RegistrantsApi registrantapi = new RegistrantsApi();
 
-    void getToken() {
-        try {
-            OAuth2Api oauth = new OAuth2Api(GotoWebinarKeyClient, GotoWebinarKeyClientSecret);
-            TokenResponse response = oauth.getAccessTokenUsingRefreshToken(refreshtoken);
-            accesstoken = response.getAccessToken();
-        } catch (com.logmein.gotocorelib.api.common.ApiException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    int getIscritti() {
-        getToken();
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-        try {
-            WebinarsApi webinarapi = new WebinarsApi();
-
-            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-
-            for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                for (Registrant registrant : getAllRegistrantsForWebinar(m.getWebinarKey())) {
-                    Contatto c = dm
-                        .getContatti()
-                        .stream()
-                        .filter(Contatto -> registrant.getEmail().equals(Contatto.getmail()))
-                        .findAny()
-                        .orElse(null);
-                    if (c == null) {
-                        dm
-                            .getContatti()
-                            .add(
-                                new Contatto(
-                                    registrant.getEmail(),
-                                    registrant.getLastName(),
-                                    registrant.getFirstName(),
-                                    "",
-                                    Fonte.GOTOWEBINAR
-                                )
-                            );
-                    }
-                }
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-        return 1;
-    }
-
-    List<Registrant> getAllRegistrantsForWebinar(String WebinarKey) throws ApiException {
-        List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
-            accesstoken,
-            8348404185963954557L,
-            Long.parseLong(WebinarKey)
-        );
-
-        return registrants;
-    }
-
-    /**
-     * Inserisce gli iscritti su dolibarr, deve poi associare l'azienda a ciascun
-     * iscritto
-     *
-     * @return
-     */
-    public int insertContacts() {
-        try {
-            Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-            Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-            Date a = new GregorianCalendar(2021, 12, 1).getTime();
-
-            RegistrantsApi registrantapi = new RegistrantsApi();
-            WebinarsApi webinarapi = new WebinarsApi();
-
-            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-
-            String input = null;
-
-            for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
-                    accesstoken,
-                    8348404185963954557L,
-                    Long.parseLong(m.getWebinarKey())
-                );
-
-                for (Registrant registrant : registrants) {
-                    input =
-                        "{\"lastname\":\"" +
-                        registrant.getLastName() +
-                        "\", \"firstname\":\"" +
-                        registrant.getFirstName() +
-                        "\", \"email\":\"" +
-                        registrant.getEmail() +
-                        "\"}";
-                    insertContact(input, registrant.getEmail());
-                }
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-
-        return 1;
-    }
-
-    private void insertContact(String input, String email) {
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-    }
-
-    int getWebinars() {
-        getToken();
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-
-        try {
-            WebinarsApi webinarapi = new WebinarsApi();
-
-            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-
-            for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                (((AccademiaDemoneMediator) dm).getWebinars()).add(m);
-            }
-        } catch (ApiException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return 0;
+    public GotoWebinarBridge(AccademiaDemoneMediator dm) {
+        super(dm);
+        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -222,5 +91,137 @@ public class GotoWebinarBridge extends DataSource {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    List<Registrant> getAllRegistrantsForWebinar(String WebinarKey) throws ApiException {
+        List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
+            accesstoken,
+            8348404185963954557L,
+            Long.parseLong(WebinarKey)
+        );
+
+        return registrants;
+    }
+
+    int getIscritti() {
+        getToken();
+        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
+        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
+        Date a = new GregorianCalendar(2021, 12, 1).getTime();
+        try {
+            WebinarsApi webinarapi = new WebinarsApi();
+
+            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
+
+            for (Webinar m : webinar.getEmbedded().getWebinars()) {
+                for (Registrant registrant : getAllRegistrantsForWebinar(m.getWebinarKey())) {
+                    Contatto c = dm
+                        .getContatti()
+                        .stream()
+                        .filter(Contatto -> registrant.getEmail().equals(Contatto.getmail()))
+                        .findAny()
+                        .orElse(null);
+                    if (c == null) {
+                        dm
+                            .getContatti()
+                            .add(
+                                new Contatto(
+                                    registrant.getEmail(),
+                                    registrant.getLastName(),
+                                    registrant.getFirstName(),
+                                    "",
+                                    Fonte.GOTOWEBINAR
+                                )
+                            );
+                    }
+                }
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    void getToken() {
+        try {
+            OAuth2Api oauth = new OAuth2Api(GotoWebinarKeyClient, GotoWebinarKeyClientSecret);
+            TokenResponse response = oauth.getAccessTokenUsingRefreshToken(refreshtoken);
+            accesstoken = response.getAccessToken();
+        } catch (com.logmein.gotocorelib.api.common.ApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    int getWebinars() {
+        getToken();
+        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
+        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
+        Date a = new GregorianCalendar(2021, 12, 1).getTime();
+
+        try {
+            WebinarsApi webinarapi = new WebinarsApi();
+
+            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
+
+            for (Webinar m : webinar.getEmbedded().getWebinars()) {
+                (((AccademiaDemoneMediator) dm).getWebinars()).add(m);
+            }
+        } catch (ApiException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void insertContact(String input, String email) {
+        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
+        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
+        Date a = new GregorianCalendar(2021, 12, 1).getTime();
+    }
+
+    /**
+     * Inserisce gli iscritti su dolibarr, deve poi associare l'azienda a ciascun
+     * iscritto
+     *
+     * @return
+     */
+    public int insertContacts() {
+        try {
+            Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
+            Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
+            Date a = new GregorianCalendar(2021, 12, 1).getTime();
+
+            RegistrantsApi registrantapi = new RegistrantsApi();
+            WebinarsApi webinarapi = new WebinarsApi();
+
+            ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
+
+            String input = null;
+
+            for (Webinar m : webinar.getEmbedded().getWebinars()) {
+                List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
+                    accesstoken,
+                    8348404185963954557L,
+                    Long.parseLong(m.getWebinarKey())
+                );
+
+                for (Registrant registrant : registrants) {
+                    input =
+                        "{\"lastname\":\"" +
+                        registrant.getLastName() +
+                        "\", \"firstname\":\"" +
+                        registrant.getFirstName() +
+                        "\", \"email\":\"" +
+                        registrant.getEmail() +
+                        "\"}";
+                    insertContact(input, registrant.getEmail());
+                }
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+
+        return 1;
     }
 }

@@ -59,7 +59,7 @@ public class DolibarrTest {
     }
 
     @Test
-    void insertInvoicesTest() {
+    void insertInvoicesTestDummy() {
         for (int i = 0; i < 10; i++) {
             Webinar we = new Webinar();
             we.setWebinarKey("123" + i + ".prova");
@@ -71,6 +71,11 @@ public class DolibarrTest {
 
     @Test
     void deleteInvoicesTest() {
-        db.deleteInvoices();
+        while (db.deleteInvoices());
+    }
+
+    @Test
+    void updatewebinar() {
+        ((AccademiaDemoneMediatorMock) am).fillWebinars();
     }
 }

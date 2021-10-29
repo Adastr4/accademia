@@ -3,47 +3,24 @@ package net.accademia.dolibarr;
 import com.logmein.gotowebinar.api.common.ApiException;
 import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import org.springframework.boot.json.BasicJsonParser;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 public class AccademiaDolibarrBridge extends DolibarrBridge {
 
     public AccademiaDolibarrBridge(AccademiaDemoneMediator dm) {
         super(dm);
-    }
-
-    public int insertWebinar() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
-
-        try {
-            for (Webinar m : ((AccademiaDemoneMediator) dm).getWebinars()) {
-                String input =
-                    "{\"ref\":\"WEBINAR.2021." +
-                    m.getWebinarKey() +
-                    "\", \"label\":\"" +
-                    m.getSubject() +
-                    "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
-
-                HttpEntity<String> entity = new HttpEntity<>(input, headers);
-
-                ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return 1;
     }
 
     /**
@@ -75,15 +52,22 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
         for (Webinar webinar : ((AccademiaDemoneMediator) dm).getWebinars()) {
             try {
                 for (Registrant registrants : ((AccademiaDemoneMediator) dm).getAllRegistrantsForWebinar(webinar.getWebinarKey())) {
+                    /**
+                     * ci può essere una sola fattura per un determianto evento e un determianto
+                     * partecipante
+                     *
+                     */
+                    String clientid = getCodiceCliente(registrants.getLastName(), registrants.getEmail());
                     Invoice fattura = dm
                         .getFatture()
                         .stream()
-                        .filter(invoice -> invoice.isIdServizio(webinar.getWebinarKey()) && invoice.isPartecipante(registrants.getEmail()))
+                        .filter(invoice -> invoice.isIdServizio(webinar.getWebinarKey()) && invoice.isCliente(clientid))
                         .findAny()
                         .orElse(null);
                     if (fattura == null) {
-                        dm.getFatture().add(new Invoice(webinar.getWebinarKey(), registrants.getEmail()));
-                    }
+                        fattura = new Invoice(webinar.getWebinarKey(), clientid, registrants.getEmail());
+                        dm.getFatture().add(fattura);
+                    } else fattura.partecipanti.add(registrants.getEmail());
                 }
             } catch (ApiException e) {
                 // TODO Auto-generated catch block
@@ -96,31 +80,59 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
         return 0;
     }
 
-    @Override
-    int insertInvoice(Invoice fattura) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices";
+    public int insertWebinar() {
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         headers.set("DOLAPIKEY", DolibarrKey);
-
+        String input = null;
+        HttpEntity<String> entity = new HttpEntity<>(input, headers);
+        ResponseEntity<String> ret = null;
+        JsonParser parser = new BasicJsonParser();
+        Map<String, Object> json = null;
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            String input = fattura.getJson();
-            HttpEntity<String> entity = new HttpEntity<>(input, headers);
-            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-            String idfattura = ret.getBody();
-            for (String idservizi : fattura.getIdservizi()) {
-                fattura.getIdservizioJson(idservizi);
-                ret = restTemplate.exchange(insertapi + "/" + idfattura + "/lines", HttpMethod.POST, entity, String.class);
-            }
-            //ret = restTemplate.exchange(insertapi+"/"+idfattura+"/validate", HttpMethod.POST, entity, String.class);
+            for (Webinar m : ((AccademiaDemoneMediator) dm).getWebinars()) {
+                input =
+                    "{\"ref\":\"WEBINAR.2021." +
+                    m.getWebinarKey() +
+                    "\", \"label\":\"" +
+                    m.getSubject() +
+                    "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" ," +
+                    "\"price\": \"90.00000000\"" +
+                    ",\"date_validation\": \"" +
+                    sm.format(m.getTimes().get(0).getStartTime()) +
+                    "\"}";
+                json = parser.parseMap(input);
+                try {
+                    ret =
+                        restTemplate.exchange(
+                            insertapi + "?sqlfilters=(t.ref:like:'WEBINAR.2021." + m.getWebinarKey() + "%') ",
+                            HttpMethod.GET,
+                            entity,
+                            String.class
+                        );
+                    if (ret.getStatusCode() == HttpStatus.OK) {
+                        List jsonl = parser.parseList(ret.getBody());
+                        String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("id");
+                        entity = new HttpEntity<>(input, headers);
+                        ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);
+                        continue;
+                    }
+                } catch (RestClientException e1) {
+                    // webinar non esiste
 
+                }
+
+                ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return 0;
+        return 1;
     }
 }

@@ -17,4 +17,9 @@ class DemoneMediatorTest {
     void testCreaWebinar() {
         fail("Not yet implemented");
     }
+
+    @Test
+    void insertInvoicesTest() {
+        ((AccademiaDemoneMediator) dm).insertInvoices();
+    }
 }

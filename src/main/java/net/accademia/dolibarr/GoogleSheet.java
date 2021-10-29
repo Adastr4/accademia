@@ -23,16 +23,10 @@ import java.util.List;
 
 public class GoogleSheet extends DataSource {
 
-    public GoogleSheet(DemoneMediator dm) {
-        super(dm);
-    }
-
-    String idclient = "88319937008-ij2efgnkmddor000c0v77ntbsfa2feme.apps.googleusercontent.com";
-    String clientsecret = "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";
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
+
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
-
     /**
      * Global instance of the scopes required by this quickstart. If modifying these
      * scopes, delete your previously saved tokens/ folder.
@@ -62,6 +56,13 @@ public class GoogleSheet extends DataSource {
             .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+    }
+
+    String idclient = "88319937008-ij2efgnkmddor000c0v77ntbsfa2feme.apps.googleusercontent.com";
+    String clientsecret = "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";
+
+    public GoogleSheet(DemoneMediator dm) {
+        super(dm);
     }
 
     /**
