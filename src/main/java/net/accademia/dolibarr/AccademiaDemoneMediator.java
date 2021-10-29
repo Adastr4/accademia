@@ -4,7 +4,13 @@ import com.logmein.gotowebinar.api.common.ApiException;
 import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 public class AccademiaDemoneMediator extends DemoneMediator {
 

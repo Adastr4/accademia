@@ -1,6 +1,7 @@
 package net.accademia.dolibarr;
 
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public abstract class DolibarrBridge extends DataSource {
     // eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJscyI6IjkwYjZmMTg4LWQ1NjItNDg3MC1hODQ1LWNiYmFhMjg0NDEwZSIsIm9nbiI6InB3ZCIsInVyaSI6Imh0dHBzOi8vd3d3LmFjY2FkZW1pYWV1cm9wZWEubmV0L2dvdG93ZWJpbmFyL29hdXRoIiwic2MiOiJjb2xsYWI6IiwiYXVkIjoiNmQ4YjU0YjAtNzg3Yy00MThjLWIyMGEtZTEwMDkyNDdkMTI0Iiwic3ViIjoiODg5ODg1MDQ5MzE1NDE5Nzg4OCIsImp0aSI6IjI5YjNjMjJkLTMzZWEtNGM5My05ZTRkLThlODU4Mjk5YTMzMSIsImV4cCI6MTYzNTE4ODk0NCwiaWF0IjoxNjM1MTg4MzQ0LCJ0eXAiOiJjIn0.RNDPRLowb3LACc573Pyume0tDOeOrnbpjXHlfcs4h-kdJp9VELDn96mpObBMp3m_AmOHRqDgS504Qt2E87_vMwXY-6WdfXufr6rQOUFMkA4TXAJXxigkdIwgFiYUJaauG-yXQlqFeWaqpZBgACMFho4roVVB5B_d_q5ZCCQjjqVpVdE5rc2qF42Dhw-5eASxkLyRruA7z9aGp48jFKlbjT8H7-dBVsqzjd0-TbIzNLLQSzRknnfWOiMH4BMOFZZHFyeej1KZPJoMG-PzJmiIdSpE-MMB6_ZScFM7LomtLST9aBleZaVm-g6qX_zceV329ZRykT5FVxaoHEFeYGUasA
     // final String uri =
     // "https://localhost:8181/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
-    String DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
+    protected String DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
 
     RestTemplate restTemplate = new RestTemplate();
 
@@ -152,10 +153,10 @@ public abstract class DolibarrBridge extends DataSource {
 
         ResponseEntity<String> ret = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
 
-        JSONArray json = null;
+        List json = new ArrayList();
         try {
             JsonParser parser = new BasicJsonParser();
-            json = (JSONArray) parser.parseMap(ret.getBody());
+            json = parser.parseList(ret.getBody());
             System.out.println(json.toString());
         } catch (Exception e) {
             // TODO Auto-generated catch block

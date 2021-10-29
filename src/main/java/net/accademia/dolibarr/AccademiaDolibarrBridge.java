@@ -72,7 +72,6 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
      */
     @Override
     public int insertInvoices() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
         for (Webinar webinar : ((AccademiaDemoneMediator) dm).getWebinars()) {
             try {
                 for (Registrant registrants : ((AccademiaDemoneMediator) dm).getAllRegistrantsForWebinar(webinar.getWebinarKey())) {
@@ -92,35 +91,36 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
             }
         }
         for (Invoice fattura : dm.getFatture()) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            headers.set("DOLAPIKEY", DolibarrKey);
-
-            try {
-                for (Webinar m : ((AccademiaDemoneMediator) dm).getWebinars()) {
-                    String input =
-                        "{\"ref\":\"WEBINAR.2021." +
-                        m.getWebinarKey() +
-                        "\", \"label\":\"" +
-                        m.getSubject() +
-                        "\", \"status\":\"1\",\"status_buy\":\"1\", \"type\":\"1\" }";
-
-                    HttpEntity<String> entity = new HttpEntity<>(input, headers);
-
-                    ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
-                }
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            insertInvoice(fattura);
         }
         return 0;
     }
 
     @Override
-    int insertInvoice(Invoice invoice) {
+    int insertInvoice(Invoice fattura) {
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        headers.set("DOLAPIKEY", DolibarrKey);
+
+        try {
+            String input = fattura.getJson();
+            HttpEntity<String> entity = new HttpEntity<>(input, headers);
+            ResponseEntity<String> ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+            String idfattura = ret.getBody();
+            for (String idservizi : fattura.getIdservizi()) {
+                fattura.getIdservizioJson(idservizi);
+                ret = restTemplate.exchange(insertapi + "/" + idfattura + "/lines", HttpMethod.POST, entity, String.class);
+            }
+            //ret = restTemplate.exchange(insertapi+"/"+idfattura+"/validate", HttpMethod.POST, entity, String.class);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return 0;
     }
 }

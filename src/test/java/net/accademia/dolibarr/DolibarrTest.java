@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 public class DolibarrTest {
 
     AccademiaDemoneMediator am = new AccademiaDemoneMediatorMock();
-    AccademiaDolibarrBridge db = new AccademiaDolibarrBridge(am);
+    AccademiaDolibarrBridgeMock db = new AccademiaDolibarrBridgeMock(am);
 
     /**
      *
@@ -67,5 +67,10 @@ public class DolibarrTest {
         }
 
         am.insertInvoices();
+    }
+
+    @Test
+    void deleteInvoicesTest() {
+        db.deleteInvoices();
     }
 }
