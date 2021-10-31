@@ -18,6 +18,10 @@ class DemoneMediatorTest {
         fail("Not yet implemented");
     }
 
+    /**
+     * test generale di inserimento delle fatture
+     *
+     */
     @Test
     void insertInvoicesTest() {
         ((AccademiaDemoneMediator) dm).insertInvoices();

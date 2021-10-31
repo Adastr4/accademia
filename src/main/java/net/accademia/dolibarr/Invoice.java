@@ -10,7 +10,7 @@ public class Invoice {
 
     List<String> idservizi = new ArrayList<String>();
     List<String> partecipanti = new ArrayList<String>();
-    String idcliente = "1622";
+    String idcliente = "1622"; // se non cè un cliennte inserscili come contatti di accademia
 
     public Invoice(String webinarKey, String clientid, String mail) {
         partecipanti.add(mail);

@@ -53,7 +53,7 @@ public class OdsBridge extends DataSource {
                                     getVat(spreadsheet.getSheet(0).getCellAt(8, nRowIndex)).replace('\"', '\''),
                                     getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
                                     getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
-                                    Fonte.FILE
+                                    file.getAbsolutePath()
                                 )
                             );
                     }
@@ -74,7 +74,7 @@ public class OdsBridge extends DataSource {
                                     (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
                                     getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
-                                    Fonte.FILE
+                                    file.getAbsolutePath()
                                 )
                             );
                     }

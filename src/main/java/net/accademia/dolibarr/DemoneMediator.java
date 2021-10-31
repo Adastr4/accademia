@@ -70,7 +70,6 @@ public abstract class DemoneMediator {
         String[] iscritti = {
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
             "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
-            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
             "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w",
             "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
             "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
@@ -80,7 +79,7 @@ public abstract class DemoneMediator {
             gs.getIscritti(element, null);
         }
 
-        String[] iscrittiv2 = { "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
+        String[] iscrittiv2 = { "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ", "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
         int formato[] = { 14, 11, 15, 13 }; // sono cambiate le colonne del fil e di goobgle
         for (String element : iscrittiv2) {
             gs.getIscritti(element, formato);

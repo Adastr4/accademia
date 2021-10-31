@@ -43,7 +43,7 @@ public class DolibarrTest {
 
     @Test
     void InsertCustomerTest() {
-        Cliente c = new Cliente("vrtd10000n@pec.istruzione.it", "", "93014980234", "", Fonte.FILE);
+        Cliente c = new Cliente("vrtd10000n@pec.istruzione.it", "", "93014980234", "", "prova");
 
         assertTrue(db.insertCustomer(c) == 1);
     }
@@ -55,7 +55,7 @@ public class DolibarrTest {
 
     @Test
     void insertContactsTest() {
-        db.insertContact(new Contatto("adriana.pipp4o@unito.it", "", "", "80088230018", Fonte.FILE));
+        db.insertContact(new Contatto("adriana.pipp4o@unito.it", "", "", "80088230018", "prova"));
     }
 
     @Test

@@ -64,7 +64,7 @@ public class XLSBridge extends DataSource {
                                     row.getCell(7).getStringCellValue().replace('\"', '\''),
                                     row.getCell(15).getStringCellValue(),
                                     row.getCell(12).getStringCellValue(),
-                                    Fonte.FILE
+                                    ffile.getAbsolutePath()
                                 )
                             );
                     }
@@ -84,7 +84,7 @@ public class XLSBridge extends DataSource {
                                     row.getCell(2).getStringCellValue(),
                                     row.getCell(3).getStringCellValue(),
                                     row.getCell(15).getStringCellValue(),
-                                    Fonte.FILE
+                                    ffile.getAbsolutePath()
                                 )
                             );
                     }

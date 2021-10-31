@@ -57,7 +57,7 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
                      * partecipante
                      *
                      */
-                    String clientid = getCodiceCliente(registrants.getLastName(), registrants.getEmail());
+                    String clientid = getCodiceCliente(registrants.getEmail());
                     Invoice fattura = dm
                         .getFatture()
                         .stream()
@@ -83,11 +83,6 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
     public int insertWebinar() {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/products";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        headers.set("DOLAPIKEY", DolibarrKey);
         String input = null;
         HttpEntity<String> entity = new HttpEntity<>(input, headers);
         ResponseEntity<String> ret = null;

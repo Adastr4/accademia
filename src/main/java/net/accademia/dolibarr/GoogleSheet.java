@@ -110,7 +110,7 @@ public class GoogleSheet extends DataSource {
                                 (String) row.get(formato[1]),
                                 (String) row.get(formato[2]),
                                 (String) row.get(formato[3]),
-                                Fonte.GOOGLESHEET
+                                spreadsheetId
                             )
                         );
                 }
@@ -130,7 +130,7 @@ public class GoogleSheet extends DataSource {
                                 (String) row.get(2),
                                 (String) row.get(3),
                                 (String) row.get(formato[2]),
-                                Fonte.GOOGLESHEET
+                                spreadsheetId
                             )
                         );
                 }

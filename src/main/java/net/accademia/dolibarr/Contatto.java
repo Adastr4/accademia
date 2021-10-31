@@ -4,15 +4,15 @@ public class Contatto {
 
     protected String piva;
 
-    protected Fonte f;
+    protected String f;
 
     protected String firstname;
 
     protected String lastname;
     String _mail;
 
-    Contatto(String mail, String firstname, String lastname, String piva, Fonte f) {
-        _mail = mail;
+    Contatto(String mail, String firstname, String lastname, String piva, String f) {
+        _mail = mail == "" ? null : mail;
         this.f = f;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -25,7 +25,18 @@ public class Contatto {
 
     public String getJson() {
         // TODO Auto-generated method stub
-        return "{\"lastname\":\"" + lastname + "\", \"firstname\":\"" + firstname + "\", \"email\":\"" + _mail + "\"}";
+        return (
+            "{\"lastname\":\"" +
+            lastname +
+            "\", \"firstname\":\"" +
+            firstname +
+            "\", \"email\":\"" +
+            _mail +
+            "\"" +
+            ",\"note_private\":\"" +
+            f +
+            "\"}"
+        );
     }
 
     public String getLastname() {
