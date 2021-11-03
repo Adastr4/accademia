@@ -75,7 +75,7 @@ public class GoogleSheet extends DataSource {
     int getIscritti(String spreadsheetId, int[] formato) {
         if (formato == null) formato = new int[] { 13, 10, 15, 12 };
 
-        if ((spreadsheetId == null) || (dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
+        if ((spreadsheetId == null) || (dm == null) || (dm.getClienti() == null)) return 0;
         try {
             // Build a new authorized API client service.
             final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -102,37 +102,28 @@ public class GoogleSheet extends DataSource {
                     .findAny()
                     .orElse(null);
                 if (c == null) {
-                    dm
-                        .getClienti()
-                        .add(
-                            new Cliente(
-                                (String) row.get(formato[0]),
-                                (String) row.get(formato[1]),
-                                (String) row.get(formato[2]),
-                                (String) row.get(formato[3]),
-                                spreadsheetId
-                            )
+                    c =
+                        new Cliente(
+                            (String) row.get(formato[0]),
+                            (String) row.get(formato[1]),
+                            (String) row.get(formato[2]),
+                            (String) row.get(formato[3]),
+                            (String) row.get(formato[4]),
+                            spreadsheetId
                         );
+                    dm.getClienti().add(c);
                 }
 
-                Contatto co = dm
+                Contatto co = c
                     .getContatti()
                     .stream()
                     .filter(Contatto -> ((String) row.get(1)).equals(Contatto.getmail()))
                     .findAny()
                     .orElse(null);
                 if (co == null) {
-                    dm
+                    c
                         .getContatti()
-                        .add(
-                            new Contatto(
-                                (String) row.get(1),
-                                (String) row.get(2),
-                                (String) row.get(3),
-                                (String) row.get(formato[2]),
-                                spreadsheetId
-                            )
-                        );
+                        .add(new Contatto((String) row.get(1), (String) row.get(2), (String) row.get(3), (String) row.get(4), c));
                 }
             }
         } catch (GeneralSecurityException e) {

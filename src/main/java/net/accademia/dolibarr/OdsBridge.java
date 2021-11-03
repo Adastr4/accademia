@@ -23,12 +23,12 @@ public class OdsBridge extends DataSource {
         SpreadSheet spreadsheet;
         try {
             // Getting the 0th sheet for manipulation| pass sheet name as string
-            if ((dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
+            if ((dm == null) || (dm.getClienti() == null)) return 0;
 
             spreadsheet = SpreadSheet.createFromFile(file);
 
             // Get row count and column count
-            int nColCount = spreadsheet.getSheet(0).getColumnCount();
+
             int nRowCount = spreadsheet.getSheet(0).getRowCount();
 
             // Iterating through each row of the selected sheet
@@ -45,36 +45,34 @@ public class OdsBridge extends DataSource {
                         .findAny()
                         .orElse(null);
                     if (c == null) {
-                        dm
-                            .getClienti()
-                            .add(
-                                new Cliente(
-                                    getVat(spreadsheet.getSheet(0).getCellAt(11, nRowIndex)),
-                                    getVat(spreadsheet.getSheet(0).getCellAt(8, nRowIndex)).replace('\"', '\''),
-                                    getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
-                                    getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
-                                    file.getAbsolutePath()
-                                )
+                        c =
+                            new Cliente(
+                                getVat(spreadsheet.getSheet(0).getCellAt(11, nRowIndex)),
+                                getVat(spreadsheet.getSheet(0).getCellAt(7, nRowIndex)).replace('\"', '\''),
+                                getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
+                                getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
+                                getVat(spreadsheet.getSheet(0).getCellAt(5, nRowIndex)),
+                                file.getAbsolutePath() + ":" + nRowIndex
                             );
+                        dm.getClienti().add(c);
                     }
 
-                    Contatto co = dm
-                        .getContatti()
-                        .stream()
-                        .filter(Contatto -> ((String) spreadsheet.getSheet(0).getCellAt(1, currindex).getValue()).equals(Contatto.getmail())
-                        )
-                        .findAny()
-                        .orElse(null);
+                    Contatto co = dm.searchContattofromCliente(
+                        (String) spreadsheet.getSheet(0).getCellAt(1, currindex).getValue(),
+                        (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
+                        (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
+                        ""
+                    );
                     if (co == null) {
-                        dm
+                        c
                             .getContatti()
                             .add(
                                 new Contatto(
                                     (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
-                                    getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
-                                    file.getAbsolutePath()
+                                    getVat(spreadsheet.getSheet(0).getCellAt(5, nRowIndex)),
+                                    c
                                 )
                             );
                     }

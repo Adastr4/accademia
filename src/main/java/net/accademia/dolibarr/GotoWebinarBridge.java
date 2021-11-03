@@ -114,28 +114,20 @@ public class GotoWebinarBridge extends DataSource {
 
             for (Webinar m : webinar.getEmbedded().getWebinars()) {
                 for (Registrant registrant : getAllRegistrantsForWebinar(m.getWebinarKey())) {
-                    Contatto c = dm
-                        .getContatti()
-                        .stream()
-                        .filter(Contatto -> registrant.getEmail().equals(Contatto.getmail()))
-                        .findAny()
-                        .orElse(null);
+                    Contatto c = dm.searchContattofromCliente(
+                        registrant.getEmail(),
+                        registrant.getLastName(),
+                        registrant.getFirstName(),
+                        "webinar:" + m.getWebinarKey()
+                    );
                     if (c == null) {
-                        dm
-                            .getContatti()
-                            .add(
-                                new Contatto(
-                                    registrant.getEmail(),
-                                    registrant.getLastName(),
-                                    registrant.getFirstName(),
-                                    "",
-                                    "webinar:" + m.getWebinarKey()
-                                )
-                            );
+                        Cliente cl = dm.getMe();
+                        c = new Contatto(registrant.getEmail(), registrant.getLastName(), registrant.getFirstName(), "", cl);
+                        cl.getContatti().add(c);
                     }
                 }
             }
-        } catch (ApiException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 1;
@@ -173,11 +165,12 @@ public class GotoWebinarBridge extends DataSource {
         return 0;
     }
 
-    private void insertContact(String input, String email) {
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
-        Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
-        Date a = new GregorianCalendar(2021, 12, 1).getTime();
-    }
+    /**
+     * @param input
+     * @param email
+     */
+    //TODO non implemetata
+    private void insertContact(String input, String email) {}
 
     /**
      * Inserisce gli iscritti su dolibarr, deve poi associare l'azienda a ciascun

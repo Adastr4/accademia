@@ -4,16 +4,13 @@ import com.logmein.gotowebinar.api.common.ApiException;
 import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
@@ -86,7 +83,7 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
         String input = null;
         HttpEntity<String> entity = new HttpEntity<>(input, headers);
         ResponseEntity<String> ret = null;
-        JsonParser parser = new BasicJsonParser();
+
         Map<String, Object> json = null;
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
         try {

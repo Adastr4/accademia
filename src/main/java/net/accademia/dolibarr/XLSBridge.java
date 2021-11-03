@@ -29,7 +29,7 @@ public class XLSBridge extends DataSource {
 
             // Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
-            if ((dm == null) || (dm.getClienti() == null) || (dm.getContatti() == null)) return 0;
+            if ((dm == null) || (dm.getClienti() == null)) return 0;
             boolean intestazione = true;
             while (rowIterator.hasNext()) {
                 if (intestazione) {
@@ -56,35 +56,34 @@ public class XLSBridge extends DataSource {
                         .findAny()
                         .orElse(null);
                     if (c == null) {
-                        dm
-                            .getClienti()
-                            .add(
-                                new Cliente(
-                                    row.getCell(13).getStringCellValue(),
-                                    row.getCell(7).getStringCellValue().replace('\"', '\''),
-                                    row.getCell(15).getStringCellValue(),
-                                    row.getCell(12).getStringCellValue(),
-                                    ffile.getAbsolutePath()
-                                )
+                        c =
+                            new Cliente(
+                                row.getCell(13).getStringCellValue(),
+                                row.getCell(7).getStringCellValue().replace('\"', '\''),
+                                row.getCell(15).getStringCellValue(),
+                                row.getCell(12).getStringCellValue(),
+                                row.getCell(5).getStringCellValue(),
+                                ffile.getAbsolutePath()
                             );
+                        dm.getClienti().add(c);
                     }
 
-                    Contatto co = dm
+                    Contatto co = c
                         .getContatti()
                         .stream()
                         .filter(Contatto -> (row.getCell(1).getStringCellValue()).equals(Contatto.getmail()))
                         .findAny()
                         .orElse(null);
                     if (co == null) {
-                        dm
+                        c
                             .getContatti()
                             .add(
                                 new Contatto(
                                     row.getCell(1).getStringCellValue(),
                                     row.getCell(2).getStringCellValue(),
                                     row.getCell(3).getStringCellValue(),
-                                    row.getCell(15).getStringCellValue(),
-                                    ffile.getAbsolutePath()
+                                    row.getCell(5).getStringCellValue(),
+                                    c
                                 )
                             );
                     }

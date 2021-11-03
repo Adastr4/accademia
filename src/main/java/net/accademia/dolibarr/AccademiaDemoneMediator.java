@@ -47,4 +47,9 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         bg.insertInvoices();
         return 1;
     }
+
+    @Override
+    protected Cliente getMe() {
+        return new Cliente("accademiaeuropea@pec.it", "Accademia Europea Soc. Coop", "04533430403", "", "", "autogenerato");
+    }
 }

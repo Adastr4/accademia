@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,6 +53,7 @@ public abstract class DolibarrBridge extends DataSource {
     RestTemplate restTemplate = new RestTemplate();
     List<Object> CustomerList = null;
     JsonParser parser = new BasicJsonParser();
+    Gson gson = new Gson();
 
     {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -75,7 +75,6 @@ public abstract class DolibarrBridge extends DataSource {
         try {
             ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
             moreinvoice = true;
-            List json = new ArrayList();
 
             try {
                 Type listType = new TypeToken<List<Object>>() {}.getType();
@@ -228,11 +227,13 @@ public abstract class DolibarrBridge extends DataSource {
          */
 
         Map<String, Object> json = parser.parseMap(c.getJson());
-        String cid = getClienteID(c.getPiva());
+        Cliente cl = c.getCliente();
+        String cid = null;
+        if (cl != null) cid = cl.getId();
         if (cid != null) {
             json.put("socid", cid);
             json.put("fk_soc", cid);
-            Gson gson = new Gson();
+
             jsonString = gson.toJson(json);
         }
         entity = new HttpEntity<>(jsonString, headers);
@@ -258,19 +259,11 @@ public abstract class DolibarrBridge extends DataSource {
         try {
             ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
         } catch (RestClientException e) {
-            e.printStackTrace();
+            c.setError(e.getMessage());
         }
         return 0;
         // TODO Auto-generated method stub
 
-    }
-
-    public int insertContacts() {
-        dm.getContatti();
-        for (Contatto c : dm.getContatti()) {
-            insertContact(c);
-        }
-        return 1;
     }
 
     /**
@@ -281,7 +274,7 @@ public abstract class DolibarrBridge extends DataSource {
      */
     int insertCustomer(Cliente cliente) {
         final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
-
+        String conid = null;
         entity = new HttpEntity<>(cliente.getJson(), headers);
         try {
             ret =
@@ -289,7 +282,7 @@ public abstract class DolibarrBridge extends DataSource {
                     insertapi +
                     "?sqlfilters=((t.tva_intra:like:'" +
                     cliente.getVat() +
-                    "%')or (t.email:like:'" +
+                    "%')and (t.email:like:'" +
                     cliente.getmail() +
                     "%'))",
                     HttpMethod.GET,
@@ -298,12 +291,11 @@ public abstract class DolibarrBridge extends DataSource {
                 );
             if (ret.getStatusCode() == HttpStatus.OK) {
                 List jsonl = parser.parseList(ret.getBody());
-                String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("ref");
+                conid = (String) ((Map<?, ?>) jsonl.get(0)).get("ref");
                 cliente.setId(conid);
                 entity = new HttpEntity<>(cliente.getJson(), headers);
 
                 ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);
-                return 1;
             }
         } catch (RestClientException e) {
             // contatto già presente
@@ -311,10 +303,20 @@ public abstract class DolibarrBridge extends DataSource {
         }
 
         try {
-            ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+            if (conid == null) {
+                ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
+                cliente.setId(ret.getBody());
+            }
         } catch (RestClientException e) {
             System.err.println(e.getMessage());
+            cliente.setError(e.getMessage());
+            return 0;
         }
+
+        for (Contatto co : cliente.getContatti()) {
+            insertContact(co);
+        }
+
         return 1;
     }
 

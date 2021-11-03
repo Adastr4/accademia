@@ -1,15 +1,30 @@
 package net.accademia.dolibarr;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cliente extends Contatto {
 
     String codiceunivoco;
     String id = null;
+    String piva = null;
+    protected List<Contatto> contatti;
 
-    Cliente(String mail, String firstname, String vat, String cu, String f) {
-        super(mail, firstname, "", vat, f);
+    Cliente(String mail, String firstname, String vat, String cu, String tel, String f) {
+        super(mail, firstname, "", tel, null);
         if (this.firstname.length() > 80) this.firstname = this.firstname.substring(0, 80);
-        if (piva.length() > 11) piva = piva.substring(0, 11);
+        if (vat.length() > 11) piva = vat.substring(0, 11);
         codiceunivoco = cu;
+        contatti = new ArrayList<>();
+        this.f = f;
+    }
+
+    public List<Contatto> getContatti() {
+        return contatti;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -29,16 +44,12 @@ public class Cliente extends Contatto {
         );
     }
 
-    public String getId() {
-        return id;
+    public String getVat() {
+        // TODO Auto-generated method stub
+        return piva;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getVat() {
-        // TODO Auto-generated method stub
-        return piva;
     }
 }

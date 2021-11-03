@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class DemoneMediator {
 
     protected List<Cliente> clienti;
-    protected List<Contatto> contatti;
+
     protected List<Invoice> fatture;
     protected DolibarrBridge bg = null;
     protected GoogleSheet gs = null;
@@ -18,7 +18,7 @@ public abstract class DemoneMediator {
 
     protected DemoneMediator() {
         clienti = new ArrayList<>();
-        contatti = new ArrayList<>();
+
         fatture = new ArrayList<Invoice>();
         gs = new GoogleSheet(this);
 
@@ -30,8 +30,35 @@ public abstract class DemoneMediator {
         return clienti;
     }
 
-    public List<Contatto> getContatti() {
-        return contatti;
+    /**
+     * cerca tra tutti i contatti dei clienti se cè un contatto con quella mail
+     *
+     * @param email
+     * @param lastname
+     * @param firstname
+     * @param prov
+     * @return
+     */
+    public Contatto searchContattofromCliente(String email, String lastname, String firstname, String prov) {
+        Contatto c = null;
+        Cliente trovato = null;
+        for (Cliente cli : clienti) {
+            c = cli.getContatti().stream().filter(Contatto -> email.equals(Contatto.getmail())).findAny().orElse(null);
+            if (c != null) {
+                c = new Contatto(email, lastname, firstname, "", cli);
+                cli.getContatti().add(c);
+                trovato = cli;
+                break;
+            }
+        }
+        if (trovato != null) return c;
+
+        //		trovato = new Cliente(email, lastname, "", "", "", prov);
+        //		clienti.add(trovato);
+        //		c = new Contatto(email, lastname, firstname, "", trovato);
+        //		trovato.getContatti().add(c);
+
+        return c;
     }
 
     public List<Invoice> getFatture() {
@@ -42,10 +69,6 @@ public abstract class DemoneMediator {
 
     public void setClienti(List<Cliente> clienti) {
         this.clienti = clienti;
-    }
-
-    public void setContatti(List<Contatto> contatti) {
-        this.contatti = contatti;
     }
 
     /**
@@ -91,8 +114,9 @@ public abstract class DemoneMediator {
         gtb.getIscritti();
 
         bg.InsertCustomers();
-        bg.insertContacts();
 
         return 0;
     }
+
+    protected abstract Cliente getMe();
 }
