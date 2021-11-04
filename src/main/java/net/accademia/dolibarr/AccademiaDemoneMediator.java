@@ -39,6 +39,12 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         return bg.insertInvoices();
     }
 
+    /**
+     * 1) sincronizza i clienti e i contatti tra le fonti sottoelencate e il DB
+     * 1.1) File Ods, File Excel, Google Sheet e Gotowebinar
+     * 2) prende i webinar da gotowebinar e li inserisce su Dolibarr
+     * 3) crea le fatture
+     */
     @Override
     int SyncIscrittitoDolibarr() {
         super.SyncIscrittitoDolibarr();

@@ -37,24 +37,19 @@ public class OdsBridge extends DataSource {
                 final int currindex = nRowIndex;
                 // Iterating through each column
 
+                Cliente ctemp = new Cliente(
+                    getVat(spreadsheet.getSheet(0).getCellAt(11, nRowIndex)),
+                    getVat(spreadsheet.getSheet(0).getCellAt(7, nRowIndex)).replace('\"', '\''),
+                    getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
+                    getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
+                    getVat(spreadsheet.getSheet(0).getCellAt(5, nRowIndex)),
+                    file.getAbsolutePath() + ":" + nRowIndex
+                );
                 try {
-                    Cliente c = dm
-                        .getClienti()
-                        .stream()
-                        .filter(cliente -> getVat(spreadsheet.getSheet(0).getCellAt(11, currindex)).equals(cliente.getmail()))
-                        .findAny()
-                        .orElse(null);
+                    Cliente c = dm.getClienti().stream().filter(cliente -> cliente.equals(ctemp)).findAny().orElse(null);
                     if (c == null) {
-                        c =
-                            new Cliente(
-                                getVat(spreadsheet.getSheet(0).getCellAt(11, nRowIndex)),
-                                getVat(spreadsheet.getSheet(0).getCellAt(7, nRowIndex)).replace('\"', '\''),
-                                getVat(spreadsheet.getSheet(0).getCellAt(12, nRowIndex)),
-                                getVat(spreadsheet.getSheet(0).getCellAt(10, nRowIndex)),
-                                getVat(spreadsheet.getSheet(0).getCellAt(5, nRowIndex)),
-                                file.getAbsolutePath() + ":" + nRowIndex
-                            );
-                        dm.getClienti().add(c);
+                        c = ctemp;
+                        dm.getClienti().add(ctemp);
                     }
 
                     Contatto co = dm.searchContattofromCliente(
@@ -69,10 +64,11 @@ public class OdsBridge extends DataSource {
                             .add(
                                 new Contatto(
                                     (String) spreadsheet.getSheet(0).getCellAt(1, nRowIndex).getValue(),
-                                    (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     (String) spreadsheet.getSheet(0).getCellAt(2, nRowIndex).getValue(),
+                                    (String) spreadsheet.getSheet(0).getCellAt(3, nRowIndex).getValue(),
                                     getVat(spreadsheet.getSheet(0).getCellAt(5, nRowIndex)),
-                                    c
+                                    c,
+                                    file.getAbsolutePath() + ":" + nRowIndex
                                 )
                             );
                     }

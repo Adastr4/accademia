@@ -31,7 +31,9 @@ public class XLSBridge extends DataSource {
             Iterator<Row> rowIterator = sheet.iterator();
             if ((dm == null) || (dm.getClienti() == null)) return 0;
             boolean intestazione = true;
+            int i = 0;
             while (rowIterator.hasNext()) {
+                i++;
                 if (intestazione) {
                     rowIterator.next(); // la prima riga ha i titoli
                     intestazione = false;
@@ -44,27 +46,32 @@ public class XLSBridge extends DataSource {
                 }
                 if (row.getCell(15).getCellType() == CellType.NUMERIC) {
                     DataFormatter formatter = new DataFormatter();
-                    String strValue = formatter.formatCellValue(cell);
+                    String strValue = formatter.formatCellValue(row.getCell(15));
                     row.getCell(15).setCellValue(strValue);
                 }
-
+                if (row.getCell(5).getCellType() == CellType.NUMERIC) {
+                    DataFormatter formatter = new DataFormatter();
+                    String strValue = formatter.formatCellValue(row.getCell(5));
+                    row.getCell(5).setCellValue(strValue);
+                }
+                if (row.getCell(12).getCellType() == CellType.NUMERIC) {
+                    DataFormatter formatter = new DataFormatter();
+                    String strValue = formatter.formatCellValue(row.getCell(12));
+                    row.getCell(12).setCellValue(strValue);
+                }
                 try {
-                    Cliente c = dm
-                        .getClienti()
-                        .stream()
-                        .filter(cliente -> (row.getCell(13).getStringCellValue()).equals(cliente.getmail()))
-                        .findAny()
-                        .orElse(null);
+                    Cliente ctemp = new Cliente(
+                        row.getCell(13).getStringCellValue(),
+                        row.getCell(7).getStringCellValue().replace('\"', '\''),
+                        row.getCell(15).getStringCellValue(),
+                        row.getCell(12).getStringCellValue(),
+                        row.getCell(5).getStringCellValue(),
+                        ffile.getAbsolutePath() + ":" + i
+                    );
+
+                    Cliente c = dm.getClienti().stream().filter(cliente -> cliente.equals(ctemp)).findAny().orElse(null);
                     if (c == null) {
-                        c =
-                            new Cliente(
-                                row.getCell(13).getStringCellValue(),
-                                row.getCell(7).getStringCellValue().replace('\"', '\''),
-                                row.getCell(15).getStringCellValue(),
-                                row.getCell(12).getStringCellValue(),
-                                row.getCell(5).getStringCellValue(),
-                                ffile.getAbsolutePath()
-                            );
+                        c = ctemp;
                         dm.getClienti().add(c);
                     }
 
@@ -83,7 +90,8 @@ public class XLSBridge extends DataSource {
                                     row.getCell(2).getStringCellValue(),
                                     row.getCell(3).getStringCellValue(),
                                     row.getCell(5).getStringCellValue(),
-                                    c
+                                    c,
+                                    ffile.getAbsolutePath() + ":" + i
                                 )
                             );
                     }

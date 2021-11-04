@@ -49,9 +49,10 @@ public abstract class DolibarrBridge extends DataSource {
     final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
     HttpHeaders headers = new HttpHeaders();
     HttpEntity<String> entity = null;
-    protected String DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
+    protected String DolibarrKey = null;
     RestTemplate restTemplate = new RestTemplate();
-    List<Object> CustomerList = null;
+    List<Object> customerList = null;
+    List<Object> servicesList = null;
     JsonParser parser = new BasicJsonParser();
     Gson gson = new Gson();
 
@@ -119,32 +120,31 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     protected String getCodiceCliente(String email) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts?limit=1000";
-
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts";
+        String idcliente = "1622";
         entity = new HttpEntity<>(null, headers);
 
-        if (CustomerList == null) {
+        if (customerList == null) {
             try {
                 ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
 
                 try {
                     Type listType = new TypeToken<List<Object>>() {}.getType();
 
-                    CustomerList = new Gson().fromJson(ret.getBody(), listType);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
+                    customerList = new Gson().fromJson(ret.getBody(), listType);
+                } catch (Exception e) {}
+            } catch (Exception e) {}
+        }
+
+        for (Object map : customerList) {
+            String id = (String) ((Map) map).get("email");
+            if (id.equalsIgnoreCase(email)) {
+                idcliente = ((String) ((Map) map).get("socid"));
+                return idcliente == null ? "1622" : idcliente;
             }
         }
 
-        for (Object map : CustomerList) {
-            String id = (String) ((Map) map).get("email");
-            if (id.equalsIgnoreCase(email)) return (String) ((Map) map).get("socid");
-        }
-
-        return null;
+        return "1622"; // id di accademia
     }
 
     protected String getCodiceCliente(String lastname, String email) {
@@ -230,13 +230,7 @@ public abstract class DolibarrBridge extends DataSource {
         Cliente cl = c.getCliente();
         String cid = null;
         if (cl != null) cid = cl.getId();
-        if (cid != null) {
-            json.put("socid", cid);
-            json.put("fk_soc", cid);
 
-            jsonString = gson.toJson(json);
-        }
-        entity = new HttpEntity<>(jsonString, headers);
         try {
             ret =
                 restTemplate.exchange(
@@ -249,6 +243,15 @@ public abstract class DolibarrBridge extends DataSource {
             if (ret.getStatusCode() == HttpStatus.OK) {
                 List jsonl = parser.parseList(ret.getBody());
                 String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("id");
+                String socid = (String) ((Map<?, ?>) jsonl.get(0)).get("socid"); // socid
+                // se nel DB il contatto non ha già un cliente gli imposto quello letto da file
+                if (socid == null || socid.equalsIgnoreCase("null")) {
+                    json.put("socid", cid);
+                    json.put("fk_soc", cid);
+
+                    jsonString = gson.toJson(json);
+                    entity = new HttpEntity<>(jsonString, headers);
+                }
 
                 ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);
                 return 1;
@@ -267,7 +270,8 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     /**
-     * se il cliente esiste lo asggiorna con le info disponiblli
+     * Il cliente è identificato da partita IVA e dalla mail. Il condice univoco non
+     * è univoco. se il cliente esiste lo aggiorna con le info disponiblli
      *
      * @param cliente
      * @return
@@ -282,7 +286,7 @@ public abstract class DolibarrBridge extends DataSource {
                     insertapi +
                     "?sqlfilters=((t.tva_intra:like:'" +
                     cliente.getVat() +
-                    "%')and (t.email:like:'" +
+                    "%') and (t.email:like:'" +
                     cliente.getmail() +
                     "%'))",
                     HttpMethod.GET,
@@ -332,7 +336,6 @@ public abstract class DolibarrBridge extends DataSource {
      * @return
      */
     public int InsertCustomers() {
-        dm.getClienti();
         for (Cliente cliente : dm.getClienti()) {
             insertCustomer(cliente);
         }
@@ -347,8 +350,8 @@ public abstract class DolibarrBridge extends DataSource {
             entity = new HttpEntity<>(input, headers);
             ret = restTemplate.exchange(insertapi, HttpMethod.POST, entity, String.class);
             String idfattura = ret.getBody();
-            for (String idservizi : fattura.getIdservizi()) {
-                entity = new HttpEntity<>(fattura.getIdservizioJson(idservizi), headers);
+            for (InvoiceLine idservizi : fattura.getInvoiceLines()) {
+                entity = new HttpEntity<>(idservizi.toJson(idservizi), headers);
                 ret = restTemplate.exchange(insertapi + "/" + idfattura + "/lines", HttpMethod.POST, entity, String.class);
             }
             // ret = restTemplate.exchange(insertapi+"/"+idfattura+"/validate",

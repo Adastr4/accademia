@@ -45,7 +45,7 @@ public abstract class DemoneMediator {
         for (Cliente cli : clienti) {
             c = cli.getContatti().stream().filter(Contatto -> email.equals(Contatto.getmail())).findAny().orElse(null);
             if (c != null) {
-                c = new Contatto(email, lastname, firstname, "", cli);
+                c = new Contatto(email, firstname, lastname, "", cli, prov);
                 cli.getContatti().add(c);
                 trovato = cli;
                 break;
@@ -53,10 +53,10 @@ public abstract class DemoneMediator {
         }
         if (trovato != null) return c;
 
-        //		trovato = new Cliente(email, lastname, "", "", "", prov);
-        //		clienti.add(trovato);
-        //		c = new Contatto(email, lastname, firstname, "", trovato);
-        //		trovato.getContatti().add(c);
+        // trovato = new Cliente(email, lastname, "", "", "", prov);
+        // clienti.add(trovato);
+        // c = new Contatto(email, lastname, firstname, "", trovato);
+        // trovato.getContatti().add(c);
 
         return c;
     }
@@ -85,11 +85,6 @@ public abstract class DemoneMediator {
         odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
         xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
 
-        /**
-         * Poi i dati dei form di Google
-         *
-         */
-
         String[] iscritti = {
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
             "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
@@ -97,13 +92,18 @@ public abstract class DemoneMediator {
             "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
             "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
             "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+            "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
         };
         for (String element : iscritti) {
             gs.getIscritti(element, null);
         }
 
-        String[] iscrittiv2 = { "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ", "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
-        int formato[] = { 14, 11, 15, 13 }; // sono cambiate le colonne del fil e di goobgle
+        String[] iscrittiv2 = {
+            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
+            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
+            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+        };
+        int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
         for (String element : iscrittiv2) {
             gs.getIscritti(element, formato);
         }

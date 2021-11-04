@@ -35,10 +35,11 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
      * @return
      */
     int SyncIscrittitoDolibarr() {
-        SyncIscrittitoDolibarrODS();
-        //		SyncIscrittitoDolibarrXLS();
-        //		SyncIscrittitoDolibarrGOOGLESHEET();
-        //		SyncIscrittitoDolibarrGotowebinar();
+        // SyncIscrittitoDolibarrODS();
+        // SyncIscrittitoDolibarrXLS();
+        SyncIscrittitoDolibarrGOOGLESHEET();
+
+        // SyncIscrittitoDolibarrGotowebinar();
         return 0;
     }
 
@@ -61,14 +62,21 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
             "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
             "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
             "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+            "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
         };
         for (String element : iscritti) {
+            clienti.clear();
             gs.getIscritti(element, null);
         }
 
-        String[] iscrittiv2 = { "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ", "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc" };
-        int formato[] = { 14, 11, 15, 13 }; // sono cambiate le colonne del fil e di goobgle
+        String[] iscrittiv2 = {
+            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
+            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
+            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+        };
+        int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
         for (String element : iscrittiv2) {
+            clienti.clear();
             gs.getIscritti(element, formato);
         }
 
@@ -90,11 +98,16 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
          * Prima i dati legacy
          *
          */
-        //odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
-        odb.readODS(new File("/home/adastra/iscrizionewebinarerrori.ods"));
+        // odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
+        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
 
         bg.InsertCustomers();
 
         return 0;
+    }
+
+    public void insertWebinar() {
+        gtb.getWebinars();
+        ((AccademiaDolibarrBridge) bg).insertWebinar();
     }
 }

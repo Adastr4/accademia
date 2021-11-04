@@ -55,7 +55,7 @@ public class DolibarrTest {
 
     @Test
     void insertContactsTest() {
-        db.insertContact(new Contatto("adriana.pipp4o@unito.it", "", "", "33333333333", null));
+        db.insertContact(new Contatto("adriana.pipp4o@unito.it", "", "", "33333333333", null, "UnitTest"));
     }
 
     @Test

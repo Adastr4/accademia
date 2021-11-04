@@ -11,10 +11,11 @@ public class Cliente extends Contatto {
     protected List<Contatto> contatti;
 
     Cliente(String mail, String firstname, String vat, String cu, String tel, String f) {
-        super(mail, firstname, "", tel, null);
+        super(mail, firstname, "", tel, null, f);
+        piva = vat == null || vat.length() < 9 ? "" : vat;
         if (this.firstname.length() > 80) this.firstname = this.firstname.substring(0, 80);
         if (vat.length() > 11) piva = vat.substring(0, 11);
-        codiceunivoco = cu;
+        codiceunivoco = cu.length() > 7 || cu.length() < 6 ? "" : cu.trim();
         contatti = new ArrayList<>();
         this.f = f;
     }
@@ -40,16 +41,26 @@ public class Cliente extends Contatto {
             getVat() +
             "\",\"note_private\":\"" +
             f +
-            "\"}"
+            "\" ,\"array_options\": { \"options_codiceunivoco\": \"" +
+            codiceunivoco +
+            "\" }}"
         );
     }
 
     public String getVat() {
-        // TODO Auto-generated method stub
         return piva;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean equals(Cliente c) {
+        if (_mail.length() != 0 && c._mail.equalsIgnoreCase(_mail)) return true;
+        if (piva.length() != 0 && c.piva.equalsIgnoreCase(piva)) return true;
+        // il codice univoco non è univoco
+        //		if (codiceunivoco.length() != 0 && c.codiceunivoco.equalsIgnoreCase(codiceunivoco))
+        //			return true;
+        return false;
     }
 }

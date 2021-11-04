@@ -43,13 +43,14 @@ public class Contatto {
      * @param piva
      * @param f
      */
-    Contatto(String mail, String firstname, String lastname, String tel, Cliente c) {
-        _mail = mail == "" ? null : mail;
+    Contatto(String mail, String firstname, String lastname, String tel, Cliente c, String fonte) {
+        _mail = mail;
 
         this.firstname = firstname;
         this.lastname = lastname;
         this.c = c;
         this.tel = tel;
+        f = fonte;
         /**
          * se la mail del cliente non è valida usiamo quella del primo contatto
          */

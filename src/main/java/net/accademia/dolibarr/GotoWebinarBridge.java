@@ -107,22 +107,33 @@ public class GotoWebinarBridge extends DataSource {
         Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
         Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
         Date a = new GregorianCalendar(2021, 12, 1).getTime();
+        Cliente cl = dm.getMe();
+        dm.getClienti().add(cl);
         try {
             WebinarsApi webinarapi = new WebinarsApi();
 
             ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-
+            int i = 0;
             for (Webinar m : webinar.getEmbedded().getWebinars()) {
+                i = 0;
                 for (Registrant registrant : getAllRegistrantsForWebinar(m.getWebinarKey())) {
+                    i++;
                     Contatto c = dm.searchContattofromCliente(
                         registrant.getEmail(),
                         registrant.getLastName(),
                         registrant.getFirstName(),
-                        "webinar:" + m.getWebinarKey()
+                        "webinar:" + m.getWebinarKey() + ":" + i
                     );
                     if (c == null) {
-                        Cliente cl = dm.getMe();
-                        c = new Contatto(registrant.getEmail(), registrant.getLastName(), registrant.getFirstName(), "", cl);
+                        c =
+                            new Contatto(
+                                registrant.getEmail(),
+                                registrant.getFirstName(),
+                                registrant.getLastName(),
+                                "",
+                                cl,
+                                m.getWebinarKey() + ":" + i
+                            );
                         cl.getContatti().add(c);
                     }
                 }
