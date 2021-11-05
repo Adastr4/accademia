@@ -10,14 +10,15 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class XLSBridge extends DataSource {
+public class XLSBridge extends DataSource implements FileReaderBridge {
 
     public XLSBridge(DemoneMediator dm) {
         super(dm);
         // TODO Auto-generated constructor stub
     }
 
-    public int readXLS(File ffile) {
+    public int readData(String sfile) {
+        File ffile = new File(sfile);
         try {
             FileInputStream file = new FileInputStream(ffile);
 

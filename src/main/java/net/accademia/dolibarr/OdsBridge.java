@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import org.jopendocument.dom.spreadsheet.MutableCell;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
-public class OdsBridge extends DataSource {
+public class OdsBridge extends DataSource implements FileReaderBridge {
 
     public OdsBridge(DemoneMediator dm) {
         super(dm);
@@ -19,7 +19,8 @@ public class OdsBridge extends DataSource {
         return null;
     }
 
-    public int readODS(File file) {
+    public int readData(String sfile) {
+        File file = new File(sfile);
         SpreadSheet spreadsheet;
         try {
             // Getting the 0th sheet for manipulation| pass sheet name as string

@@ -82,8 +82,8 @@ public abstract class DemoneMediator {
          * Prima i dati legacy
          *
          */
-        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
-        xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
+        odb.readData("/home/adastra/iscrizionewebinar.ods");
+        xb.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
 
         String[] iscritti = {
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",

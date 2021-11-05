@@ -92,7 +92,7 @@ public abstract class GotoWebinarBridge extends DataSource {
         }
     }
 
-    List<Registrant> getAllRegistrantsForWebinar(String WebinarKey) throws ApiException {
+    public List<Registrant> getAllRegistrantsForWebinar(String WebinarKey) throws ApiException {
         List<Registrant> registrants = registrantapi.getAllRegistrantsForWebinar(
             accesstoken,
             8348404185963954557L,
@@ -168,7 +168,7 @@ public abstract class GotoWebinarBridge extends DataSource {
 
     public int getWebinars() {
         getToken();
-        Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
+        Calendar myCalendar = new GregorianCalendar(2020, 1, 1);
         Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
         Date a = new GregorianCalendar(2021, 12, 1).getTime();
 

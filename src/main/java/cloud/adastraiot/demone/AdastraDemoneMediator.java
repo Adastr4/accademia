@@ -6,6 +6,7 @@ import com.logmein.gotowebinar.api.model.Webinar;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import net.accademia.dolibarr.CSVBridge;
 import net.accademia.dolibarr.Cliente;
 import net.accademia.dolibarr.DemoneMediator;
 import net.accademia.dolibarr.IWebinarMediator;
@@ -13,16 +14,19 @@ import net.accademia.dolibarr.IWebinarMediator;
 public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
     List<Webinar> webinars = new ArrayList<>();
+    CSVBridge csvb = null;
 
     public AdastraDemoneMediator() {
         super();
         bg = new AdastraDolibarrBridge(this);
         gtb = new AdastraGotoWebinarBridge(this);
+        csvb = new CSVBridge(this);
     }
 
     @Override
     public int insertInvoices() {
-        return 0;
+        gtb.getWebinars();
+        return bg.insertInvoices();
     }
 
     @Override
@@ -32,14 +36,19 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     @Override
     public int SyncIscrittitoDolibarr() {
-        gtb.getWebinars();
-        ((AdastraDolibarrBridge) bg).insertWebinar();
+        //     clienti.add(getMe());
+        File actual = new File("/home/adastra/Scaricati/fatture");
+        for (File f : actual.listFiles()) {
+            csvb.readData(f.getAbsolutePath());
+        }
+
+        //syncWebinar();
 
         /**
          * Prima i dati legacy
          *
          */
-        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
+        // odb.readData("/home/adastra/iscrizionewebinar.ods");
         // xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
         //
         // String[] iscritti = { "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
@@ -70,15 +79,20 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
         // */
         // gtb.getIscritti();
 
-        bg.InsertCustomers();
+        //       bg.InsertCustomers();
+        insertInvoices();
 
         return 0;
     }
 
+    private void syncWebinar() {
+        gtb.getWebinars();
+        ((AdastraDolibarrBridge) bg).insertWebinar();
+    }
+
     @Override
     public List<Registrant> getAllRegistrantsForWebinar(String webinarKey) throws ApiException {
-        // TODO Auto-generated method stub
-        return null;
+        return gtb.getAllRegistrantsForWebinar(webinarKey);
     }
 
     @Override

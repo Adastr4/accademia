@@ -14,6 +14,6 @@ class OdsBridgeTest {
         File iscritti = new File("/home/adastra/iscrizionewebinar.ods");
 
         if (!iscritti.exists()) assertTrue(false);
-        db.readODS(iscritti);
+        db.readData("/home/adastra/iscrizionewebinar.ods");
     }
 }

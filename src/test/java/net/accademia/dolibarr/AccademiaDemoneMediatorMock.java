@@ -86,7 +86,7 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
     }
 
     int SyncIscrittitoDolibarrXLS() {
-        xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
+        xb.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
 
         bg.InsertCustomers();
 
@@ -99,7 +99,7 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
          *
          */
         // odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
-        odb.readODS(new File("/home/adastra/iscrizionewebinar.ods"));
+        odb.readData("/home/adastra/iscrizionewebinar.ods");
 
         bg.InsertCustomers();
 

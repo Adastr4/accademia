@@ -14,6 +14,6 @@ class XLSBridgeTest {
         File iscritti = new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
 
         if (!iscritti.exists()) assertTrue(false);
-        db.readXLS(iscritti);
+        db.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
     }
 }

@@ -29,7 +29,7 @@ class AdastraDemoneMediatorTest {
     }
 
     @Test
-    void testImportClienti() {
+    void testImportWebinar() {
         dm.SyncIscrittitoDolibarr();
     }
 }
