@@ -8,13 +8,12 @@ import java.util.List;
 
 public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
-    //A6P7I24pVHD27jVz0b6owzRHs2j0aNsC
     List<Webinar> webinars = new ArrayList<>();
 
     public AccademiaDemoneMediator() {
         super();
         bg = new AccademiaDolibarrBridge(this);
-        gtb = new GotoWebinarBridge(this);
+        gtb = new AccademiaGotoWebinarBridge(this);
     }
 
     /**
@@ -52,7 +51,7 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
     public int SyncIscrittitoDolibarr() {
         super.SyncIscrittitoDolibarr();
         gtb.getWebinars();
-        ((AccademiaDolibarrBridge) bg).insertWebinar();
+        ((WebinarDolibarrBridge) bg).insertWebinar();
         bg.insertInvoices();
         return 1;
     }

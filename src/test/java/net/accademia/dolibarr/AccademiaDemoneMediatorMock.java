@@ -26,7 +26,7 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
 
     public void fillWebinars() {
         gtb.getWebinars();
-        ((AccademiaDolibarrBridge) bg).insertWebinar();
+        ((WebinarDolibarrBridge) bg).insertWebinar();
     }
 
     /**
@@ -108,6 +108,6 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
 
     public void insertWebinar() {
         gtb.getWebinars();
-        ((AccademiaDolibarrBridge) bg).insertWebinar();
+        ((WebinarDolibarrBridge) bg).insertWebinar();
     }
 }

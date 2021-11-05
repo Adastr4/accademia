@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class GotoWebinarBridgeTest {
 
-    GotoWebinarBridge db = new GotoWebinarBridge(null);
+    GotoWebinarBridge db = new AccademiaGotoWebinarBridge(null);
 
     @Test
     void getIscrittiTest() {

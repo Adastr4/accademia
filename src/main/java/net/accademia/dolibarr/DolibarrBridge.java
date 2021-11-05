@@ -48,12 +48,12 @@ public abstract class DolibarrBridge extends DataSource {
 
     protected String uri = null;
     protected HttpHeaders headers = new HttpHeaders();
-    HttpEntity<String> entity = null;
+    protected HttpEntity<String> entity = null;
     protected String DolibarrKey = null;
-    RestTemplate restTemplate = new RestTemplate();
+    protected RestTemplate restTemplate = new RestTemplate();
     List<Object> customerList = null;
     List<Object> servicesList = null;
-    JsonParser parser = new BasicJsonParser();
+    protected JsonParser parser = new BasicJsonParser();
     Gson gson = new Gson();
 
     {
@@ -342,7 +342,7 @@ public abstract class DolibarrBridge extends DataSource {
         return 1;
     }
 
-    int insertInvoice(Invoice fattura) {
+    protected int insertInvoice(Invoice fattura) {
         final String insertapi = uri + "/invoices";
 
         try {
