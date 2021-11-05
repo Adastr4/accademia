@@ -24,7 +24,7 @@ class DemoneMediatorTest {
      */
     @Test
     void insertInvoicesTest() {
-        ((AccademiaDemoneMediator) dm).insertInvoices();
+        ((IWebinarMediator) dm).insertInvoices();
     }
 
     /**

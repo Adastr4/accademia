@@ -17,7 +17,7 @@ public class CARTDemoneMediator extends DemoneMediator {
     }
 
     @Override
-    protected Cliente getMe() {
+    public Cliente getMe() {
         // TODO Auto-generated method stub
         return null;
     }

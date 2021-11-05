@@ -10,7 +10,7 @@ public class Cliente extends Contatto {
     String piva = null;
     protected List<Contatto> contatti;
 
-    Cliente(String mail, String firstname, String vat, String cu, String tel, String f) {
+    public Cliente(String mail, String firstname, String vat, String cu, String tel, String f) {
         super(mail, firstname, "", tel, null, f);
         piva = vat == null || vat.length() < 9 ? "" : vat;
         if (this.firstname.length() > 80) this.firstname = this.firstname.substring(0, 80);

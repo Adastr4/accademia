@@ -34,7 +34,7 @@ public class AccademiaDemoneMediatorMock extends AccademiaDemoneMediator {
      *
      * @return
      */
-    int SyncIscrittitoDolibarr() {
+    public int SyncIscrittitoDolibarr() {
         // SyncIscrittitoDolibarrODS();
         // SyncIscrittitoDolibarrXLS();
         SyncIscrittitoDolibarrGOOGLESHEET();

@@ -19,6 +19,7 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
 
     public AccademiaDolibarrBridge(AccademiaDemoneMediator dm) {
         super(dm);
+        uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php";
         DolibarrKey = "VR576iFzqo5Q4Y6CEUgz01Ag0QQmelt0";
         headers.set("DOLAPIKEY", DolibarrKey);
     }
@@ -37,11 +38,11 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
     public int insertInvoices() {
         int i = 0, j = 0, k = 0;
         // TODO: verificare di non inserre fatture precedenti l'ultima data di fatturazione
-        for (Webinar webinar : ((AccademiaDemoneMediator) dm).getWebinars()) {
+        for (Webinar webinar : ((IWebinarMediator) dm).getWebinars()) {
             i++;
             Invoice fattura = null;
             try {
-                for (Registrant registrants : ((AccademiaDemoneMediator) dm).getAllRegistrantsForWebinar(webinar.getWebinarKey())) {
+                for (Registrant registrants : ((IWebinarMediator) dm).getAllRegistrantsForWebinar(webinar.getWebinarKey())) {
                     j++;
                     /**
                      * ci può essere una sola fattura per un determianto evento e un determianto
@@ -128,7 +129,7 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
         Map<String, Object> json = null;
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            for (Webinar m : ((AccademiaDemoneMediator) dm).getWebinars()) {
+            for (Webinar m : ((IWebinarMediator) dm).getWebinars()) {
                 input =
                     "{\"ref\":\"WEBINAR." +
                     new SimpleDateFormat("yyyyMMdd").format(m.getTimes().get(0).getStartTime()) +

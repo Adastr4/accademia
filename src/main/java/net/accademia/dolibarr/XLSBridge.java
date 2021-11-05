@@ -17,7 +17,7 @@ public class XLSBridge extends DataSource {
         // TODO Auto-generated constructor stub
     }
 
-    int readXLS(File ffile) {
+    public int readXLS(File ffile) {
         try {
             FileInputStream file = new FileInputStream(ffile);
 

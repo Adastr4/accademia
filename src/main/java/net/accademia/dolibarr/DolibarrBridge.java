@@ -46,8 +46,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public abstract class DolibarrBridge extends DataSource {
 
-    final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC&limit=100";
-    HttpHeaders headers = new HttpHeaders();
+    protected String uri = null;
+    protected HttpHeaders headers = new HttpHeaders();
     HttpEntity<String> entity = null;
     protected String DolibarrKey = null;
     RestTemplate restTemplate = new RestTemplate();
@@ -68,7 +68,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     public boolean deleteInvoices() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?limit=1000";
+        final String insertapi = uri + "/invoices?limit=1000";
         boolean moreinvoice = false;
 
         entity = new HttpEntity<>(null, headers);
@@ -101,7 +101,7 @@ public abstract class DolibarrBridge extends DataSource {
 
     private String getClienteID(String piva) {
         if ((piva == null) || (piva == "")) return null;
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
+        final String insertapi = uri + "/thirdparties";
 
         entity = new HttpEntity<>(null, headers);
         List json = null;
@@ -120,7 +120,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     protected String getCodiceCliente(String email) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts?limit=2000";
+        final String insertapi = uri + "/contacts?limit=2000";
         String idcliente = "1622";
         entity = new HttpEntity<>(null, headers);
 
@@ -148,7 +148,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     protected String getCodiceCliente(String lastname, String email) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts?limit=1000";
+        final String insertapi = uri + "/contacts?limit=1000";
 
         try {
             entity = new HttpEntity<>(null, headers);
@@ -169,7 +169,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     int getCustomers() {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties?sortfield=t.rowid&sortorder=ASC";
+        final String insertapi = uri + "/thirdparties?sortfield=t.rowid&sortorder=ASC";
 
         entity = new HttpEntity<>(null, headers);
         // HttpEntity<String> entity = new HttpEntity<>("body", headers);
@@ -188,14 +188,14 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     public int getFatture() {
-        final String uri = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices?sortfield=t.rowid&sortorder=ASC";
+        final String insertapi = uri + "/invoices?sortfield=t.rowid&sortorder=ASC";
 
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         headers.set("DOLAPIKEY", DolibarrKey);
         entity = new HttpEntity<>(null, headers);
 
-        ret = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+        ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
 
         List json = new ArrayList();
         try {
@@ -217,7 +217,7 @@ public abstract class DolibarrBridge extends DataSource {
      * @return
      */
     int insertContact(Contatto c) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts";
+        final String insertapi = uri + "/contacts";
 
         entity = new HttpEntity<>(c.getJson(), headers);
         ret = null;
@@ -277,7 +277,7 @@ public abstract class DolibarrBridge extends DataSource {
      * @return
      */
     int insertCustomer(Cliente cliente) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/thirdparties";
+        final String insertapi = uri + "/thirdparties";
         String conid = null;
         entity = new HttpEntity<>(cliente.getJson(), headers);
         try {
@@ -343,7 +343,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     int insertInvoice(Invoice fattura) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices";
+        final String insertapi = uri + "/invoices";
 
         try {
             String input = fattura.getJson();

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class AccademiaDemoneMediatorTest {
 
+    DemoneMediator dm = new AccademiaDemoneMediator();
+
     @Test
     void testInsertInvoices() {
         fail("Not yet implemented");

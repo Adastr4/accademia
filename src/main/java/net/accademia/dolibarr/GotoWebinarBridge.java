@@ -38,7 +38,7 @@ public class GotoWebinarBridge extends DataSource {
     final String oaut =
         "https://api.getgo.com/oauth/v2/authorize?client_id=6d8b54b0-787c-418c-b20a-e1009247d124&response_type=code&redirect_uri=https://www.accademiaeuropea.net/gotowebinar/oauth";
 
-    public GotoWebinarBridge(AccademiaDemoneMediator dm) {
+    public GotoWebinarBridge(DemoneMediator dm) {
         super(dm);
     }
 
@@ -102,7 +102,7 @@ public class GotoWebinarBridge extends DataSource {
         return registrants;
     }
 
-    int getIscritti() {
+    public int getIscritti() {
         getToken();
         Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
         Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
@@ -167,7 +167,7 @@ public class GotoWebinarBridge extends DataSource {
             ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
 
             for (Webinar m : webinar.getEmbedded().getWebinars()) {
-                (((AccademiaDemoneMediator) dm).getWebinars()).add(m);
+                (((IWebinarMediator) dm).getWebinars()).add(m);
             }
         } catch (ApiException e) {
             // TODO Auto-generated catch block

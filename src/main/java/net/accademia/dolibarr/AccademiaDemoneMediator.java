@@ -6,8 +6,9 @@ import com.logmein.gotowebinar.api.model.Webinar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccademiaDemoneMediator extends DemoneMediator {
+public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
+    //A6P7I24pVHD27jVz0b6owzRHs2j0aNsC
     List<Webinar> webinars = new ArrayList<>();
 
     public AccademiaDemoneMediator() {
@@ -26,10 +27,12 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         return 0;
     }
 
+    @Override
     public List<Registrant> getAllRegistrantsForWebinar(String webinarKey) throws ApiException {
         return gtb.getAllRegistrantsForWebinar(webinarKey);
     }
 
+    @Override
     public List<Webinar> getWebinars() {
         return webinars;
     }
@@ -41,13 +44,12 @@ public class AccademiaDemoneMediator extends DemoneMediator {
     }
 
     /**
-     * 1) sincronizza i clienti e i contatti tra le fonti sottoelencate e il DB
-     * 1.1) File Ods, File Excel, Google Sheet e Gotowebinar
-     * 2) prende i webinar da gotowebinar e li inserisce su Dolibarr
-     * 3) crea le fatture
+     * 1) sincronizza i clienti e i contatti tra le fonti sottoelencate e il DB 1.1)
+     * File Ods, File Excel, Google Sheet e Gotowebinar 2) prende i webinar da
+     * gotowebinar e li inserisce su Dolibarr 3) crea le fatture
      */
     @Override
-    int SyncIscrittitoDolibarr() {
+    public int SyncIscrittitoDolibarr() {
         super.SyncIscrittitoDolibarr();
         gtb.getWebinars();
         ((AccademiaDolibarrBridge) bg).insertWebinar();
@@ -56,7 +58,7 @@ public class AccademiaDemoneMediator extends DemoneMediator {
     }
 
     @Override
-    protected Cliente getMe() {
+    public Cliente getMe() {
         return new Cliente("accademiaeuropea@pec.it", "Accademia Europea Soc. Coop", "04533430403", "", "", "autogenerato");
     }
 }

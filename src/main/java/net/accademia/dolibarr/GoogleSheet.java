@@ -107,7 +107,7 @@ public class GoogleSheet extends DataSource {
      * @param formato
      */
 
-    int getIscritti(String spreadsheetId, int[] formato) {
+    public int getIscritti(String spreadsheetId, int[] formato) {
         if (formato == null) formato = new int[] { 13, 10, 15, 12, 5 };
 
         if ((spreadsheetId == null) || (dm == null) || (dm.getClienti() == null)) return 0;

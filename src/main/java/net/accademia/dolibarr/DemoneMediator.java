@@ -14,7 +14,7 @@ public abstract class DemoneMediator {
     protected GotoWebinarBridge gtb = null;
     protected OdsBridge odb = null;
 
-    XLSBridge xb = null;
+    protected XLSBridge xb = null;
 
     protected DemoneMediator() {
         clienti = new ArrayList<>();
@@ -77,7 +77,7 @@ public abstract class DemoneMediator {
      *
      * @return
      */
-    int SyncIscrittitoDolibarr() {
+    public int SyncIscrittitoDolibarr() {
         /**
          * Prima i dati legacy
          *
@@ -94,16 +94,17 @@ public abstract class DemoneMediator {
             "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
             "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
         };
-        for (String element : iscritti) {
-            gs.getIscritti(element, null);
-        }
-
         String[] iscrittiv2 = {
             "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
             "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
             "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
         };
         int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
+
+        for (String element : iscritti) {
+            gs.getIscritti(element, null);
+        }
+
         for (String element : iscrittiv2) {
             gs.getIscritti(element, formato);
         }
@@ -118,5 +119,5 @@ public abstract class DemoneMediator {
         return 0;
     }
 
-    protected abstract Cliente getMe();
+    public abstract Cliente getMe();
 }
