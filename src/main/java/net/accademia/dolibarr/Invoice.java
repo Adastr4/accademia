@@ -11,16 +11,15 @@ import java.util.Map;
 
 public class Invoice {
 
-    List<InvoiceLine> servizi = new ArrayList<InvoiceLine>();
+    Calendar calendar = Calendar.getInstance();
+    List<InvoiceLine> servizi = new ArrayList<>();
     String idcliente = "1622"; // se non cè un cliennte inserscili come contatti di accademia
     Date datafattura;
 
-    public Invoice(String webinarKey, String mail, Date date, String customerid) throws Exception {
-        if (customerid == null) throw new Exception("Clietne non valido ");
-        servizi.add(new InvoiceLine(mail, webinarKey));
-
+    public Invoice(InvoiceLine invoiceLine, Date date, String customerid) {
         datafattura = date;
         idcliente = customerid;
+        servizi.add(invoiceLine);
     }
 
     public List<InvoiceLine> getInvoiceLines() {
@@ -33,7 +32,7 @@ public class Invoice {
      *
      */
     public String getIdservizioJson(String idservizi2) {
-        Map<String, String> json = new HashMap<String, String>();
+        Map<String, String> json = new HashMap<>();
 
         json.put("ref", "WEBINAR.2021.1019932687784993804");
         json.put("qty", "1");
@@ -48,10 +47,15 @@ public class Invoice {
      *
      */
     public String getJson() {
-        Map<String, String> json = new HashMap<String, String>();
+        Map<String, String> json = new HashMap<>();
+
+        calendar.setTime(datafattura);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.MONTH, 1);
 
         json.put("socid", idcliente);
-        json.put("date", "\"" + datafattura.getTime() + "\"");
+        // imposto la data al primo del mese successivo
+        json.put("date", "" + calendar.getTimeInMillis() / 1000);
         json.put("type", "0");
         json.put("paye", "1");
 
@@ -64,13 +68,14 @@ public class Invoice {
         return idcliente.equalsIgnoreCase(clientid);
     }
 
-    /** se non ho emesso in quel mese fattura per quel cliente allora torna falso
+    /**
+     * se non ho emesso in quel mese fattura per quel cliente allora torna falso
+     *
      * @param date
      * @param clientid
      * @return
      */
     public boolean isDraft(Date date, String clientid) {
-        Calendar calendar = Calendar.getInstance();
         calendar.setTime(datafattura);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 

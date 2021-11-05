@@ -56,8 +56,7 @@ public class Cliente extends Contatto {
     }
 
     public boolean equals(Cliente c) {
-        if (_mail.length() != 0 && c._mail.equalsIgnoreCase(_mail)) return true;
-        if (piva.length() != 0 && c.piva.equalsIgnoreCase(piva)) return true;
+        if ((_mail.length() != 0 && c._mail.equalsIgnoreCase(_mail)) || (piva.length() != 0 && c.piva.equalsIgnoreCase(piva))) return true;
         // il codice univoco non è univoco
         //		if (codiceunivoco.length() != 0 && c.codiceunivoco.equalsIgnoreCase(codiceunivoco))
         //			return true;

@@ -55,11 +55,7 @@ public class Contatto {
          * se la mail del cliente non è valida usiamo quella del primo contatto
          */
         if (c == null) return;
-        if (c._mail == null) {
-            c._mail = mail;
-            return;
-        }
-        if (!c._mail.contains("@")) {
+        if ((c._mail == null) || !c._mail.contains("@")) {
             c._mail = mail;
             return;
         }

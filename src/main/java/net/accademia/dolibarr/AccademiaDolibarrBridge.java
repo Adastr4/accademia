@@ -7,15 +7,11 @@ import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.springframework.boot.json.BasicJsonParser;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
@@ -32,29 +28,15 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
      * on line, inserire fattura alla loro azienda per tutti i webinar a cui hanno
      * partecipato in quel mese
      *
-     *
-     * inserisci la fattura
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices {@code
-     *
-     *       "socid": "574",
-     *       "type": "0",
-     *       "date": 1614639600,
-     *       "paye": "1"
-     *       }
-     *
-     *
-     * inserisci la linea
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
-     *
-     * {@code { "ref": "WEBINAR.2021.1019932687784993804", "qty": "1", "fk_product":
-     * "12" } }
-     *
-     * validi la fattura
-     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
+     * non deve essere possibile inserire fatture precedenti l'ultima data di fatturazione
+     * inserisci la fattura: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices
+     * inserisci la linea: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
+     * validi la fattura: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
      */
     @Override
     public int insertInvoices() {
         int i = 0, j = 0, k = 0;
+        // TODO: verificare di non inserre fatture precedenti l'ultima data di fatturazione
         for (Webinar webinar : ((AccademiaDemoneMediator) dm).getWebinars()) {
             i++;
             Invoice fattura = null;
@@ -79,15 +61,14 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
                         if (fattura == null) {
                             fattura =
                                 new Invoice(
-                                    webinar.getWebinarKey(),
-                                    registrants.getEmail(),
+                                    new InvoiceLine(registrants.getEmail(), servizio),
                                     webinar.getTimes().get(0).getStartTime(),
                                     clientid
                                 );
                             dm.getFatture().add(fattura);
                             k++;
                         } else {
-                            fattura.getInvoiceLines().add(new InvoiceLine(registrants.getEmail(), webinar.getWebinarKey()));
+                            fattura.getInvoiceLines().add(new InvoiceLine(registrants.getEmail(), servizio));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -128,8 +109,8 @@ public class AccademiaDolibarrBridge extends DolibarrBridge {
         }
 
         for (Object map : servicesList) {
-            String id = (String) ((Map) map).get("email");
-            if (id.equalsIgnoreCase(idservizio)) {
+            String id = (String) ((Map) map).get("ref");
+            if (id.contains(idservizio)) {
                 return (Map) map;
             }
         }

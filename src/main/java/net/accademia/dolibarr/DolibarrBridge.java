@@ -120,7 +120,7 @@ public abstract class DolibarrBridge extends DataSource {
     }
 
     protected String getCodiceCliente(String email) {
-        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts";
+        final String insertapi = "https://www.accademiaeuropa.it/dolibarr/api/index.php/contacts?limit=2000";
         String idcliente = "1622";
         entity = new HttpEntity<>(null, headers);
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AccademiaDemoneMediator extends DemoneMediator {
 
-    List<Webinar> webinars = new ArrayList<Webinar>();
+    List<Webinar> webinars = new ArrayList<>();
 
     public AccademiaDemoneMediator() {
         super();
@@ -34,6 +34,7 @@ public class AccademiaDemoneMediator extends DemoneMediator {
         return webinars;
     }
 
+    @Override
     public int insertInvoices() {
         gtb.getWebinars();
         return bg.insertInvoices();
