@@ -161,7 +161,6 @@ public abstract class GotoWebinarBridge extends DataSource {
             response = oauth.getAccessTokenUsingRefreshToken(refreshtoken);
             accesstoken = response.getAccessToken();
         } catch (com.logmein.gotocorelib.api.common.ApiException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

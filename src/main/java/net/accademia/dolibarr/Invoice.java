@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class Invoice {
 
+    IDtype t;
+
     Calendar calendar = Calendar.getInstance();
     List<InvoiceLine> servizi = new ArrayList<>();
     String idcliente = "1622"; // se non cè un cliennte inserscili come contatti di accademia
@@ -20,6 +22,14 @@ public class Invoice {
         datafattura = date;
         idcliente = customerid;
         servizi.add(invoiceLine);
+        this.t = IDtype.IDBOLIBARR;
+    }
+
+    public Invoice(InvoiceLine invoiceLine, Date date, String customerid, IDtype t) {
+        datafattura = date;
+        idcliente = customerid;
+        servizi.add(invoiceLine);
+        this.t = t;
     }
 
     public List<InvoiceLine> getInvoiceLines() {
@@ -85,5 +95,19 @@ public class Invoice {
         if (!this.idcliente.equalsIgnoreCase(clientid)) return false;
         if (date.after(da.getTime()) && date.before(a.getTime())) return true;
         return false;
+    }
+
+    public String getPiva() {
+        switch (t) {
+            case PIVA:
+                return idcliente;
+            default:
+                return null;
+        }
+    }
+
+    public void setClientId(String conid, IDtype t) {
+        idcliente = conid;
+        this.t = t;
     }
 }

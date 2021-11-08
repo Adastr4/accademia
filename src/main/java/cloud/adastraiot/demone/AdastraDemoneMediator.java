@@ -25,7 +25,7 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     @Override
     public int insertInvoices() {
-        gtb.getWebinars();
+        //  gtb.getWebinars();
         return bg.insertInvoices();
     }
 

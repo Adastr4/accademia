@@ -27,15 +27,18 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
      * on line, inserire fattura alla loro azienda per tutti i webinar a cui hanno
      * partecipato in quel mese
      *
-     * non deve essere possibile inserire fatture precedenti l'ultima data di fatturazione
-     * inserisci la fattura: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices
-     * inserisci la linea: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
-     * validi la fattura: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
+     * non deve essere possibile inserire fatture precedenti l'ultima data di
+     * fatturazione inserisci la fattura:
+     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices inserisci la
+     * linea: https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/lines
+     * validi la fattura:
+     * https://www.accademiaeuropa.it/dolibarr/api/index.php/invoices/9/validate
      */
     @Override
     public int insertInvoices() {
         int i = 0, j = 0, k = 0;
-        // TODO: verificare di non inserre fatture precedenti l'ultima data di fatturazione
+        // TODO: verificare di non inserre fatture precedenti l'ultima data di
+        // fatturazione
         for (Webinar webinar : ((IWebinarMediator) dm).getWebinars()) {
             i++;
             Invoice fattura = null;
@@ -80,9 +83,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
                 e.printStackTrace();
             }
         }
-        for (Invoice fattura : dm.getFatture()) {
-            insertInvoice(fattura);
-        }
+        super.insertInvoices();
         return 0;
     }
 

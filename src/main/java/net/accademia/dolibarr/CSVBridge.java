@@ -30,9 +30,7 @@ public class CSVBridge extends DataSource implements FileReaderBridge {
             BufferedReader br = new BufferedReader(new FileReader(ffile));
             int i = 0;
             Map<String, String> json = null;
-            while (
-                (line = br.readLine()) != null
-            ) { // returns a Boolean value
+            while ((line = br.readLine()) != null) { // returns a Boolean value
                 i++;
                 if (i == 1) continue;
                 String[] employee = line.split(splitBy); // use comma as separator
@@ -44,12 +42,13 @@ public class CSVBridge extends DataSource implements FileReaderBridge {
                 json.put("ref", "");
                 json.put("qty", "1");
                 json.put("id", "");
-                json.put("price", employee[6]);
+                json.put("price", employee[6].replace(",", ".").replace("\"", ""));
                 fattura =
                     new Invoice(
                         new InvoiceLine(employee[4].replace("\'", ""), json),
                         new SimpleDateFormat("dd/MM/yyyy").parse(employee[3]),
-                        ""
+                        employee[4].replace("\'", ""),
+                        IDtype.PIVA
                     );
                 dm.getFatture().add(fattura);
             }

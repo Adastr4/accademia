@@ -132,8 +132,12 @@ public abstract class DolibarrBridge extends DataSource {
                     Type listType = new TypeToken<List<Object>>() {}.getType();
 
                     customerList = new Gson().fromJson(ret.getBody(), listType);
-                } catch (Exception e) {}
-            } catch (Exception e) {}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         for (Object map : customerList) {
@@ -364,5 +368,12 @@ public abstract class DolibarrBridge extends DataSource {
         return 0;
     }
 
-    public abstract int insertInvoices();
+    public int insertInvoices() {
+        int i = 0;
+        for (Invoice fattura : dm.getFatture()) {
+            i++;
+            insertInvoice(fattura);
+        }
+        return i;
+    }
 }
