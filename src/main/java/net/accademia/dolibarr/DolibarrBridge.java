@@ -64,7 +64,6 @@ public abstract class DolibarrBridge extends DataSource {
 
     public DolibarrBridge(DemoneMediator dm) {
         super(dm);
-        // TODO Auto-generated constructor stub
     }
 
     public boolean deleteInvoices() {
@@ -83,40 +82,18 @@ public abstract class DolibarrBridge extends DataSource {
                 List<Object> yourList = new Gson().fromJson(ret.getBody(), listType);
 
                 for (Object map : yourList) {
-                    String id = (String) ((Map) map).get("id");
+                    String id = (String) ((Map<?, ?>) map).get("id");
                     if (id.equalsIgnoreCase("5")) continue;
 
                     ret = restTemplate.exchange(insertapi + "/" + id, HttpMethod.DELETE, entity, String.class);
                 }
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return moreinvoice;
-    }
-
-    private String getClienteID(String piva) {
-        if ((piva == null) || (piva == "")) return null;
-        final String insertapi = uri + "/thirdparties";
-
-        entity = new HttpEntity<>(null, headers);
-        List json = null;
-        try {
-            ret = restTemplate.exchange(insertapi + "?sqlfilters=(t.tva_intra:like:'" + piva + "%')", HttpMethod.GET, entity, String.class);
-
-            if (ret.getStatusCode() != HttpStatus.OK) return null;
-
-            json = parser.parseList(ret.getBody());
-            return (String) ((Map<?, ?>) json.get(0)).get("ref");
-        } catch (RestClientException e) {
-            // contatto non presente
-            System.err.println(e.getMessage());
-        }
-        return null;
     }
 
     protected String getCodiceCliente(String email) {
@@ -148,28 +125,7 @@ public abstract class DolibarrBridge extends DataSource {
             }
         }
 
-        return "1622"; // id di accademia
-    }
-
-    protected String getCodiceCliente(String lastname, String email) {
-        final String insertapi = uri + "/contacts?limit=1000";
-
-        try {
-            entity = new HttpEntity<>(null, headers);
-            ret = null;
-            ret = restTemplate.exchange(insertapi + "?sqlfilters=(t.email:like:'" + email + "%')", HttpMethod.GET, entity, String.class);
-            if (ret.getStatusCode() == HttpStatus.OK) {
-                List jsonl = parser.parseList(ret.getBody());
-                String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("socid");
-
-                return conid;
-            }
-        } catch (RestClientException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
+        return dm.getMe().getId(); // id di accademia
     }
 
     int getCustomers() {
@@ -185,7 +141,6 @@ public abstract class DolibarrBridge extends DataSource {
             json = (JSONArray) parser.parseMap(ret.getBody());
             System.out.println(json.toString());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return 1;
@@ -201,12 +156,11 @@ public abstract class DolibarrBridge extends DataSource {
 
         ret = restTemplate.exchange(insertapi, HttpMethod.GET, entity, String.class);
 
-        List json = new ArrayList();
+        List<?> json = new ArrayList();
         try {
             json = parser.parseList(ret.getBody());
             System.out.println(json.toString());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -245,7 +199,7 @@ public abstract class DolibarrBridge extends DataSource {
                 );
             if (cid == null) return 1; // inuitle proseguire se il cliente non c'è
             if (ret.getStatusCode() == HttpStatus.OK) {
-                List jsonl = parser.parseList(ret.getBody());
+                List<?> jsonl = parser.parseList(ret.getBody());
                 String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("id");
                 String socid = (String) ((Map<?, ?>) jsonl.get(0)).get("socid"); // socid
                 // se nel DB il contatto non ha già un cliente gli imposto quello letto da file
@@ -298,7 +252,7 @@ public abstract class DolibarrBridge extends DataSource {
                     String.class
                 );
             if (ret.getStatusCode() == HttpStatus.OK) {
-                List jsonl = parser.parseList(ret.getBody());
+                List<?> jsonl = parser.parseList(ret.getBody());
                 conid = (String) ((Map<?, ?>) jsonl.get(0)).get("ref");
                 cliente.setId(conid);
                 entity = new HttpEntity<>(cliente.getJson(), headers);
@@ -346,6 +300,12 @@ public abstract class DolibarrBridge extends DataSource {
         return 1;
     }
 
+    /**
+     * Verificare che la fattura non sia stata già inserita
+     *
+     * @param fattura
+     * @return
+     */
     protected int insertInvoice(Invoice fattura) {
         final String insertapi = uri + "/invoices";
 
@@ -362,7 +322,6 @@ public abstract class DolibarrBridge extends DataSource {
             // HttpMethod.POST, entity, String.class);
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return 0;

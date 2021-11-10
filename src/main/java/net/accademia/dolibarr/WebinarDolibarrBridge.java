@@ -45,28 +45,18 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
             try {
                 for (Registrant registrants : ((IWebinarMediator) dm).getAllRegistrantsForWebinar(webinar.getWebinarKey())) {
                     j++;
-                    /**
-                     * ci può essere una sola fattura per un determianto evento e un determianto
-                     * partecipante
-                     *
-                     */
+
                     Map servizio = getCodiceServizio(webinar.getWebinarKey());
                     String clientid = getCodiceCliente(registrants.getEmail());
-                    fattura =
-                        dm
-                            .getFatture()
-                            .stream()
-                            .filter(invoice -> invoice.isDraft(webinar.getTimes().get(0).getStartTime(), clientid))
-                            .findAny()
-                            .orElse(null);
+                    Invoice fatturatemp = new Invoice(
+                        new InvoiceLine(registrants.getEmail(), servizio),
+                        webinar.getTimes().get(0).getStartTime(),
+                        clientid
+                    );
+                    fattura = dm.getFatture().stream().filter(invoice -> invoice.equals(fatturatemp)).findAny().orElse(null);
                     try {
                         if (fattura == null) {
-                            fattura =
-                                new Invoice(
-                                    new InvoiceLine(registrants.getEmail(), servizio),
-                                    webinar.getTimes().get(0).getStartTime(),
-                                    clientid
-                                );
+                            fattura = fatturatemp;
                             dm.getFatture().add(fattura);
                             k++;
                         } else {
@@ -126,7 +116,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
                             String.class
                         );
                     if (ret.getStatusCode() == HttpStatus.OK) {
-                        List jsonl = parser.parseList(ret.getBody());
+                        List<?> jsonl = parser.parseList(ret.getBody());
                         String conid = (String) ((Map<?, ?>) jsonl.get(0)).get("id");
                         entity = new HttpEntity<>(input, headers);
                         ret = restTemplate.exchange(insertapi + "/" + conid, HttpMethod.PUT, entity, String.class);

@@ -58,6 +58,16 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
 
     @Override
     public Cliente getMe() {
-        return new Cliente("accademiaeuropea@pec.it", "Accademia Europea Soc. Coop", "04533430403", "", "", "autogenerato");
+        if (me == null) {
+            me = new Cliente("accademiaeuropea@pec.it", "Accademia Europea Soc. Coop", "04533430403", "", "", "autogenerato");
+            me.setId("1622");
+        }
+        return me;
+    }
+
+    @Override
+    public int syncProspect() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

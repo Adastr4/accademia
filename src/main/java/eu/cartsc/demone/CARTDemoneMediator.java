@@ -21,4 +21,10 @@ public class CARTDemoneMediator extends DemoneMediator {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public int syncProspect() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

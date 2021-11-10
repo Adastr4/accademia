@@ -125,7 +125,7 @@ public class GoogleSheet extends DataSource {
                 return 0;
             }
             int i = 1;
-            for (List row : values) {
+            for (List<?> row : values) {
                 // Print columns A and E, which correspond to indices 0 and 4.
                 i++;
                 if (row.size() < 15) continue;

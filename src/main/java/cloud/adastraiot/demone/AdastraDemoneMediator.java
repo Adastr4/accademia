@@ -25,24 +25,24 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     @Override
     public int insertInvoices() {
-        //  gtb.getWebinars();
+        // gtb.getWebinars();
         return bg.insertInvoices();
     }
 
     @Override
     public Cliente getMe() {
-        return new Cliente("adastrastartup@pec.it", "Adastra Startup Soc. Coop", "04315980401", "", "", "autogenerato");
+        if (me == null) {
+            me = new Cliente("adastrastartup@pec.it", "Adastra Startup Soc. Coop", "04315980401", "", "", "autogenerato");
+            me.setId("1622");
+        }
+        return me;
     }
 
     @Override
     public int SyncIscrittitoDolibarr() {
-        //     clienti.add(getMe());
-        File actual = new File("/home/adastra/Scaricati/fatture");
-        for (File f : actual.listFiles()) {
-            csvb.readData(f.getAbsolutePath());
-        }
+        syncFatture();
 
-        //syncWebinar();
+        // syncWebinar();
 
         /**
          * Prima i dati legacy
@@ -79,13 +79,25 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
         // */
         // gtb.getIscritti();
 
-        //       bg.InsertCustomers();
+        // bg.InsertCustomers();
+        // syncWebinar();
+
+        return 1;
+    }
+
+    public int syncFatture() {
+        // clienti.add(getMe());
+        File actual = new File("/home/adastra/Scaricati/fatture");
+        for (File f : actual.listFiles()) {
+            csvb.readData(f.getAbsolutePath());
+        }
+
         insertInvoices();
 
         return 0;
     }
 
-    private void syncWebinar() {
+    void syncWebinar() {
         gtb.getWebinars();
         ((AdastraDolibarrBridge) bg).insertWebinar();
     }
@@ -99,5 +111,11 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
     public List<Webinar> getWebinars() {
         // TODO Auto-generated method stub
         return webinars;
+    }
+
+    @Override
+    public int syncProspect() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 public abstract class DemoneMediator {
 
+    protected Cliente me = null;
     protected List<Cliente> clienti;
 
     protected List<Invoice> fatture;
@@ -120,4 +121,6 @@ public abstract class DemoneMediator {
     }
 
     public abstract Cliente getMe();
+
+    public abstract int syncProspect();
 }

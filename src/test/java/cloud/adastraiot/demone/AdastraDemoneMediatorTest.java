@@ -30,6 +30,38 @@ class AdastraDemoneMediatorTest {
 
     @Test
     void testImportWebinar() {
-        dm.SyncIscrittitoDolibarr();
+        dm.syncWebinar();
+    }
+
+    @Test
+    void testSyncFatture() {
+        dm.syncFatture();
+    }
+
+    /**
+     * <ul>
+     * <li> caricare le mail dei potenziali clienti </li>
+     * <li> gestire gli stoop mail </li>
+     * <li> il webinar è creato su dolibarr</li>
+     * <li> il webinar è creato su gotowebinar</li>
+     * <li> viene creata la form</li>
+     * <li> viene creata la locandina </li>
+     * <li> viene creata la timeline dell'evneto nel sito</li>
+     * <li> viene creare l'item da vendere sull'ecommerce</li>
+     * <li> viene creata mail</li>
+     * <li> la mail è inviata a tutti i partecipanti</li>
+     * <li> ogni iscritto è inserito su gotowebinar</li>
+     * <li> ad ogni iscritto è creata la prefattura</li>
+     * <li> ad ogni iscritto è creato l'attestato</li>
+     * <li> i dati della banca sono importati periodicamente per la chiusura delle partite</li>
+     * <li> creare un link di cancellazione su  mail jet</li>
+     * <li> se dopo la scadenza la fattura non è incassata viene generato un insoluto e un ticket su redmine</li>
+     * </ul>
+     *
+     *
+     * */
+    @Test
+    void testworkflow() {
+        dm.syncProspect();
     }
 }

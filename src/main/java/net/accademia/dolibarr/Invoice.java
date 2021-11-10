@@ -78,25 +78,6 @@ public class Invoice {
         return idcliente.equalsIgnoreCase(clientid);
     }
 
-    /**
-     * se non ho emesso in quel mese fattura per quel cliente allora torna falso
-     *
-     * @param date
-     * @param clientid
-     * @return
-     */
-    public boolean isDraft(Date date, String clientid) {
-        calendar.setTime(datafattura);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        GregorianCalendar da = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
-        calendar.add(Calendar.MONTH, 1);
-        GregorianCalendar a = (GregorianCalendar) calendar;
-        if (!this.idcliente.equalsIgnoreCase(clientid)) return false;
-        if (date.after(da.getTime()) && date.before(a.getTime())) return true;
-        return false;
-    }
-
     public String getPiva() {
         switch (t) {
             case PIVA:
@@ -109,5 +90,28 @@ public class Invoice {
     public void setClientId(String conid, IDtype t) {
         idcliente = conid;
         this.t = t;
+    }
+
+    /**
+     * ci può essere una sola fattura per un determianto evento e un determianto
+     * partecipante
+     *
+     * se non ho emesso in quel mese fattura per quel cliente allora torna falso
+     *
+     * @param date
+     * @param clientid
+     * @return
+     */
+
+    public boolean equals(Invoice c) {
+        calendar.setTime(datafattura);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        GregorianCalendar da = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
+        calendar.add(Calendar.MONTH, 1);
+        GregorianCalendar a = (GregorianCalendar) calendar;
+        if (!this.idcliente.equalsIgnoreCase(c.idcliente)) return false;
+        if (c.datafattura.after(da.getTime()) && c.datafattura.before(a.getTime())) return true;
+        return false;
     }
 }

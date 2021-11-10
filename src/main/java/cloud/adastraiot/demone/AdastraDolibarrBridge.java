@@ -41,7 +41,7 @@ public class AdastraDolibarrBridge extends WebinarDolibarrBridge {
                     String.class
                 );
             if (ret.getStatusCode() == HttpStatus.OK) {
-                List jsonl = parser.parseList(ret.getBody());
+                List<?> jsonl = parser.parseList(ret.getBody());
                 conid = (String) ((Map<?, ?>) jsonl.get(0)).get("ref");
                 fattura.setClientId(conid, IDtype.IDBOLIBARR);
             }
