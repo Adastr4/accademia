@@ -1,0 +1,29 @@
+{
+  "demoneApp": {
+    "source": {
+      "home": {
+        "title": "Sources",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Source",
+        "createOrEditLabel": "Genera o modifica un Source",
+        "search": "Cerca Source",
+        "notFound": "No Sources found"
+      },
+      "created": "&Egrave; stato generato un nuovo Source con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Source identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Source con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Source {{ id }}?"
+      },
+      "detail": {
+        "title": "Source"
+      },
+      "id": "ID",
+      "sourceid": "Sourceid",
+      "description": "Description",
+      "fonte": "Fonte",
+      "data": "Data",
+      "error": "Error"
+    }
+  }
+}

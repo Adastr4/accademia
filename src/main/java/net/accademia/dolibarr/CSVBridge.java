@@ -3,6 +3,7 @@ package net.accademia.dolibarr;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class CSVBridge extends DataSource implements FileReaderBridge {
         try {
             Invoice fattura = null;
             // parsing a CSV file into BufferedReader class constructor
-            BufferedReader br = new BufferedReader(new FileReader(ffile));
+            BufferedReader br = new BufferedReader(new FileReader(ffile, StandardCharsets.UTF_8));
             int i = 0;
             Map<String, String> json = null;
             while ((line = br.readLine()) != null) { // returns a Boolean value

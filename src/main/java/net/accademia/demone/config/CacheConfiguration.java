@@ -47,6 +47,9 @@ public class CacheConfiguration {
             createCache(cm, net.accademia.demone.domain.User.class.getName());
             createCache(cm, net.accademia.demone.domain.Authority.class.getName());
             createCache(cm, net.accademia.demone.domain.User.class.getName() + ".authorities");
+            createCache(cm, net.accademia.demone.domain.Source.class.getName());
+            createCache(cm, net.accademia.demone.domain.Source.class.getName() + ".errors");
+            createCache(cm, net.accademia.demone.domain.Error.class.getName());
             // jhipster-needle-caffeine-add-entry
         };
     }

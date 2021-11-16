@@ -1,14 +1,28 @@
 {
-  "error": {
-    "title": "Error page!",
-    "http": {
-      "400": "Bad request.",
-      "403": "You are not authorized to access this page.",
-      "404": "The page does not exist.",
-      "405": "The HTTP verb you used is not supported for this URL.",
-      "500": "Internal server error."
-    },
-    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-    "validation": "Validation error on the server."
+  "demoneApp": {
+    "error": {
+      "home": {
+        "title": "Errors",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Error",
+        "createOrEditLabel": "Create or edit a Error",
+        "search": "Search for Error",
+        "notFound": "No Errors found"
+      },
+      "created": "A new Error is created with identifier {{ param }}",
+      "updated": "A Error is updated with identifier {{ param }}",
+      "deleted": "A Error is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Error {{ id }}?"
+      },
+      "detail": {
+        "title": "Error"
+      },
+      "id": "ID",
+      "errorid": "Errorid",
+      "description": "Description",
+      "data": "Data",
+      "source": "Source"
+    }
   }
 }

@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-source-heading" data-cy="SourceCreateUpdateHeading" jhiTranslate="demoneApp.source.home.createOrEditLabel">
+        Create or edit a Source
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="demoneApp.source.sourceid" for="field_sourceid">Sourceid</label>
+          <input type="text" class="form-control" name="sourceid" id="field_sourceid" data-cy="sourceid" formControlName="sourceid" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="demoneApp.source.description" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="demoneApp.source.fonte" for="field_fonte">Fonte</label>
+          <select class="form-control" name="fonte" formControlName="fonte" id="field_fonte" data-cy="fonte">
+            <option [ngValue]="null">{{ 'demoneApp.Fonte.null' | translate }}</option>
+            <option *ngFor="let fonte of fonteValues" [value]="fonte">{{ 'demoneApp.Fonte.' + fonte | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="demoneApp.source.data" for="field_data">Data</label>
+          <div class="d-flex">
+            <input
+              id="field_data"
+              data-cy="data"
+              type="datetime-local"
+              class="form-control"
+              name="data"
+              formControlName="data"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

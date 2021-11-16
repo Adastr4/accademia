@@ -1,0 +1,11 @@
+{
+  "demoneApp": {
+    "Fonte": {
+      "null": "",
+      "GOOGLESHEET": "GOOGLESHEET",
+      "GOTOWEBINAR": "GOTOWEBINAR",
+      "DOLIBARR": "DOLIBARR",
+      "FILE": "FILE"
+    }
+  }
+}

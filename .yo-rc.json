@@ -44,7 +44,9 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "reactive": false,
-    "enableGradleEnterprise": false
+    "enableGradleEnterprise": false,
+    "entities": ["Source", "Error"],
+    "lastLiquibaseTimestamp": 1637066024000
   },
   "git-provider": "GitHub",
   "git-company": "Adastr4",
