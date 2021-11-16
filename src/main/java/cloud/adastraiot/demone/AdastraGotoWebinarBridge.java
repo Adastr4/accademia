@@ -5,7 +5,7 @@ import net.accademia.dolibarr.GotoWebinarBridge;
 
 public class AdastraGotoWebinarBridge extends GotoWebinarBridge {
 
-    public AdastraGotoWebinarBridge(DemoneMediator dm) {
+    public AdastraGotoWebinarBridge(DemoneMediator dm) throws Exception {
         super(dm);
         GotoWebinarKeyClient = "a3a5e80f-c11e-4993-a826-33b6a667dc6f";
         //code=eyJraWQiOiJvYXV0aHYyLmxtaS5jb20uMDIxOSIsImFsZyI6IlJTNTEyIn0.eyJzYyI6ImNvbGxhYjoiLCJzdWIiOiI4NDcyMjQ2NTcyMjg5MjIzOTUwIiwiYXVkIjoiYTNhNWU4MGYtYzExZS00OTkzLWE4MjYtMzNiNmE2NjdkYzZmIiwib2duIjoicHdkIiwibHMiOiIzZTUxZmM4YS0wMzI3LTQ2OTQtYWY0MS1iNjNjYmJhN2E4NWEiLCJ0eXAiOiJjIiwiZXhwIjoxNjM2MTE0ODQ5LCJpYXQiOjE2MzYxMTQyNDksImp0aSI6IjQ3MWY5NDU5LTBhOGUtNGNhYi05N2Y5LWVjMWZjNmEyMWY2ZCJ9.GLpu5j4qQdX7M0R0tguloaehv8CTSb_RbpOra1hdeTsEeB3uoBojv3FSbO6RctKHKHwVlkRu220JH4cuFwFgzgJQBfSNaLzErrGGxc3ABLJPh8OyzRtnL8Gxt3e4FUvcXJKpUUi6GCP7ksg9WNRj1ps8aOUA-oKI4piXL6pnxpuMCWnLon5Z1te0JRfGgMjkLVbI4qU1TfxeTk4nxjWRZbDTAjP2gV-zPvBtmZC-Zywcs9ZZEoyHWHlce2T6iNpRIr5mLtGR7Odyk0vvk0hTSab8SCYlwtrW-C3-9TC3zwBDE2bDyNmLKvy0-sDfGor4q1P1QOkYK9T8r2Sm-GokLg

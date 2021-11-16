@@ -18,9 +18,14 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     public AdastraDemoneMediator() {
         super();
-        bg = new AdastraDolibarrBridge(this);
-        gtb = new AdastraGotoWebinarBridge(this);
-        csvb = new CSVBridge(this);
+        try {
+            bg = new AdastraDolibarrBridge(this);
+            gtb = new AdastraGotoWebinarBridge(this);
+            csvb = new CSVBridge(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

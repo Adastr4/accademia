@@ -62,7 +62,7 @@ public abstract class DolibarrBridge extends DataSource {
         headers.set("DOLAPIKEY", DolibarrKey);
     }
 
-    public DolibarrBridge(DemoneMediator dm) {
+    public DolibarrBridge(DemoneMediator dm) throws Exception {
         super(dm);
     }
 

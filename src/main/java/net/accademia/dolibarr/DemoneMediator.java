@@ -18,13 +18,18 @@ public abstract class DemoneMediator {
     protected XLSBridge xb = null;
 
     protected DemoneMediator() {
-        clienti = new ArrayList<>();
+        try {
+            clienti = new ArrayList<>();
 
-        fatture = new ArrayList<>();
-        gs = new GoogleSheet(this);
+            fatture = new ArrayList<>();
+            gs = new GoogleSheet(this);
 
-        odb = new OdsBridge(this);
-        xb = new XLSBridge(this);
+            odb = new OdsBridge(this);
+            xb = new XLSBridge(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public List<Cliente> getClienti() {

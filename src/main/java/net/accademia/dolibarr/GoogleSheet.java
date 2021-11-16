@@ -96,7 +96,7 @@ public class GoogleSheet extends DataSource {
         return credential;
     }
 
-    public GoogleSheet(DemoneMediator dm) {
+    public GoogleSheet(DemoneMediator dm) throws Exception {
         super(dm);
     }
 

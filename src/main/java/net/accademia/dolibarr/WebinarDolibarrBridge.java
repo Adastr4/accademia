@@ -17,7 +17,7 @@ import org.springframework.web.client.RestClientException;
 
 public abstract class WebinarDolibarrBridge extends DolibarrBridge {
 
-    public WebinarDolibarrBridge(DemoneMediator dm) {
+    public WebinarDolibarrBridge(DemoneMediator dm) throws Exception {
         super(dm);
         // TODO Auto-generated constructor stub
     }

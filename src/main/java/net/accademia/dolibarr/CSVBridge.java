@@ -14,9 +14,8 @@ public class CSVBridge extends DataSource implements FileReaderBridge {
     String line = "";
     String splitBy = ";";
 
-    public CSVBridge(DemoneMediator dm) {
+    public CSVBridge(DemoneMediator dm) throws Exception {
         super(dm);
-        // TODO Auto-generated constructor stub
     }
 
     /**

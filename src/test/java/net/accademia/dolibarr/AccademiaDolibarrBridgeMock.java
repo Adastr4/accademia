@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 public class AccademiaDolibarrBridgeMock extends AccademiaDolibarrBridge {
 
-    public AccademiaDolibarrBridgeMock(AccademiaDemoneMediator dm) {
+    public AccademiaDolibarrBridgeMock(AccademiaDemoneMediator dm) throws Exception {
         super(dm);
         // TODO Auto-generated constructor stub
     }

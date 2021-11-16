@@ -21,7 +21,16 @@ import org.junit.jupiter.api.Test;
 public class DolibarrTest {
 
     AccademiaDemoneMediator am = new AccademiaDemoneMediatorMock();
-    AccademiaDolibarrBridgeMock db = new AccademiaDolibarrBridgeMock(am);
+    AccademiaDolibarrBridgeMock db = null;
+
+    {
+        try {
+            db = new AccademiaDolibarrBridgeMock(am);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     /**
      *

@@ -37,7 +37,7 @@ public abstract class GotoWebinarBridge extends DataSource {
     TokenResponse response = null;
     OAuth2Api oauth = null;
 
-    public GotoWebinarBridge(DemoneMediator dm) {
+    public GotoWebinarBridge(DemoneMediator dm) throws Exception {
         super(dm);
     }
 

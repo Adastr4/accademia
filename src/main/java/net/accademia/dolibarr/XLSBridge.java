@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class XLSBridge extends DataSource implements FileReaderBridge {
 
-    public XLSBridge(DemoneMediator dm) {
+    public XLSBridge(DemoneMediator dm) throws Exception {
         super(dm);
         // TODO Auto-generated constructor stub
     }

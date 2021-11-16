@@ -12,8 +12,13 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
 
     public AccademiaDemoneMediator() {
         super();
-        bg = new AccademiaDolibarrBridge(this);
-        gtb = new AccademiaGotoWebinarBridge(this);
+        try {
+            bg = new AccademiaDolibarrBridge(this);
+            gtb = new AccademiaGotoWebinarBridge(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**

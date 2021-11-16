@@ -4,7 +4,16 @@ import org.junit.jupiter.api.Test;
 
 class GoogleSheetTest {
 
-    GoogleSheet gs = new GoogleSheet(new AccademiaDemoneMediator());
+    GoogleSheet gs = null;
+
+    {
+        try {
+            gs = new GoogleSheet(new AccademiaDemoneMediator());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void testGetIscrittiv2() {
