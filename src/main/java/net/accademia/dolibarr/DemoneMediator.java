@@ -1,5 +1,6 @@
 package net.accademia.dolibarr;
 
+import eu.cartsc.demone.OwnCloudBridge;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,9 @@ public abstract class DemoneMediator {
     protected GoogleSheet gs = null;
     protected GotoWebinarBridge gtb = null;
     protected OdsBridge odb = null;
-
     protected XLSBridge xb = null;
+
+    protected OwnCloudBridge oc = null;
 
     protected DemoneMediator() {
         try {
