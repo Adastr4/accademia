@@ -70,4 +70,9 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
         // TODO Auto-generated method stub
         return 0;
     }
+
+    public void syncWebinar() {
+        gtb.getWebinars();
+        ((WebinarDolibarrBridge) bg).insertWebinar();
+    }
 }

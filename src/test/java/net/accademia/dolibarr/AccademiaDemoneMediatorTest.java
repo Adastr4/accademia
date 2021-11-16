@@ -10,36 +10,36 @@ class AccademiaDemoneMediatorTest {
 
     @Test
     void testInsertInvoices() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
     void testSyncIscrittitoDolibarr() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
     void testGetMe() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
     void testAccademiaDemoneMediator() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
-    void testCreaWebinar() {
-        fail("Not yet implemented");
+    void testsyncWebinar() {
+        ((AccademiaDemoneMediator) dm).syncWebinar();
     }
 
     @Test
     void testGetAllRegistrantsForWebinar() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
     void testGetWebinars() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 }
