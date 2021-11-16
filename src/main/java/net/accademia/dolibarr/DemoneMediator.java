@@ -1,10 +1,13 @@
 package net.accademia.dolibarr;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DemoneMediator {
+
+    protected String csvinvoicefolder = null;
+    protected String odsfolder = null;
+    protected String xlsfolder = null;
 
     protected Cliente me = null;
     protected List<Cliente> clienti;

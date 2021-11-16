@@ -9,7 +9,9 @@ import java.util.List;
 import net.accademia.dolibarr.CSVBridge;
 import net.accademia.dolibarr.Cliente;
 import net.accademia.dolibarr.DemoneMediator;
+import net.accademia.dolibarr.GotoWebinarBridge;
 import net.accademia.dolibarr.IWebinarMediator;
+import net.accademia.dolibarr.OdsBridge;
 
 public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
@@ -18,6 +20,10 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     public AdastraDemoneMediator() {
         super();
+        csvinvoicefolder = "/home/adastra/Scaricati/fatture";
+        odsfolder = "";
+        xlsfolder = "";
+
         try {
             bg = new AdastraDolibarrBridge(this);
             gtb = new AdastraGotoWebinarBridge(this);
@@ -45,6 +51,15 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     @Override
     public int SyncIscrittitoDolibarr() {
+        File actual = new File(odsfolder);
+        for (File f : actual.listFiles()) {
+            odb.readData(f.getAbsolutePath());
+        }
+        actual = new File(xlsfolder);
+        for (File f : actual.listFiles()) {
+            xb.readData(f.getAbsolutePath());
+        }
+
         syncFatture();
 
         // syncWebinar();
@@ -92,7 +107,8 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     public int syncFatture() {
         // clienti.add(getMe());
-        File actual = new File("/home/adastra/Scaricati/fatture");
+
+        File actual = new File(csvinvoicefolder);
         for (File f : actual.listFiles()) {
             csvb.readData(f.getAbsolutePath());
         }

@@ -429,6 +429,12 @@
 		</dependency>
 
 		<!-- Thanks for using https://jar-download.com -->
+<!-- https://mvnrepository.com/artifact/com.github.lookfirst/sardine -->
+<dependency>
+    <groupId>com.github.lookfirst</groupId>
+    <artifactId>sardine</artifactId>
+    <version>5.0</version>
+</dependency>
 
 	</dependencies>
 
