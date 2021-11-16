@@ -10,7 +10,7 @@ class GotoWebinarBridgeTest {
 
     {
         try {
-            db = new AccademiaGotoWebinarBridge(null);
+            db = new AccademiaGotoWebinarBridge(new AccademiaDemoneMediator());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -24,7 +24,7 @@ class GotoWebinarBridgeTest {
 
     @Test
     void insertContactTest() {
-        assertTrue(db.insertContacts() == 1);
+        assertTrue(db.insertContacts() > 1);
     }
 
     @Test
