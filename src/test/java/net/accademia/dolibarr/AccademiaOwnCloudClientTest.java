@@ -22,6 +22,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("test")
 class AccademiaOwnCloudClientTest {
 
+    DemoneMediator dm = new AccademiaDemoneMediator();
+
     @Autowired
     private SourceRepository sourceRepository;
 
