@@ -40,10 +40,10 @@ class AdastraDemoneMediatorTest {
 
     /**
      * <ul>
+     * <li> il webinar è creato su gotowebinar</li>
      * <li> caricare le mail dei potenziali clienti </li>
      * <li> gestire gli stoop mail </li>
      * <li> il webinar è creato su dolibarr</li>
-     * <li> il webinar è creato su gotowebinar</li>
      * <li> viene creata la form</li>
      * <li> viene creata la locandina </li>
      * <li> viene creata la timeline dell'evneto nel sito</li>
@@ -62,6 +62,8 @@ class AdastraDemoneMediatorTest {
      * */
     @Test
     void testworkflow() {
+        //dm.syncWebinar(); // OK sincronizza correttamente
+        dm.SyncIscrittitoDolibarr();
         dm.syncProspect();
     }
 }

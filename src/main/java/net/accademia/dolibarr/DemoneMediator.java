@@ -27,7 +27,6 @@ public abstract class DemoneMediator {
             clienti = new ArrayList<>();
 
             fatture = new ArrayList<>();
-            gs = new GoogleSheet(this);
 
             odb = new OdsBridge(this);
             xb = new XLSBridge(this);

@@ -8,7 +8,7 @@ class GoogleSheetTest {
 
     {
         try {
-            gs = new GoogleSheet(new AccademiaDemoneMediator());
+            gs = new AccademiaGoogleSheet(new AccademiaDemoneMediator());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -15,6 +15,7 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
         try {
             bg = new AccademiaDolibarrBridge(this);
             gtb = new AccademiaGotoWebinarBridge(this);
+            gs = new AccademiaGoogleSheet(this);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

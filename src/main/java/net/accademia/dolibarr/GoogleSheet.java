@@ -31,7 +31,7 @@ import java.util.List;
  * @author adastra
  *
  */
-public class GoogleSheet extends DataSource {
+public abstract class GoogleSheet extends DataSource {
 
     private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
 
@@ -43,9 +43,9 @@ public class GoogleSheet extends DataSource {
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-    static String idclient = "88319937008-ij2efgnkmddor000c0v77ntbsfa2feme.apps.googleusercontent.com";
-    static String clientsecret = "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";
-    static String refreshToken = "1//09_c2jlItZ3MICgYIARAAGAkSNwF-L9IrITPLzBmOBQpv2RroZkA6sg_v2fwf95rx7jSl4Hbyq6-XP0FrL7oLVWZQ3WpKjiVbT58";
+    protected static String idclient = null;
+    protected static String clientsecret = null;
+    protected static String refreshToken = null;
 
     public static String getNewToken(String refreshToken, String clientId, String clientSecret) throws IOException {
         TokenResponse tokenResponse = new GoogleRefreshTokenRequest(

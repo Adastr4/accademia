@@ -106,7 +106,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
                     ret =
                         restTemplate.exchange(
                             insertapi +
-                            "?sqlfilters=(t.ref:like:'WEBINAR.2021." +
+                            "?sqlfilters=(t.ref:like:'WEBINAR." +
                             new SimpleDateFormat("yyyyMMdd").format(m.getTimes().get(0).getStartTime()) +
                             "." +
                             m.getWebinarKey() +
