@@ -62,8 +62,8 @@ class AdastraDemoneMediatorTest {
      * */
     @Test
     void testworkflow() {
-        //dm.syncWebinar(); // OK sincronizza correttamente
-        dm.SyncIscrittitoDolibarr();
-        dm.syncProspect();
+        // assertTrue(dm.syncWebinar()>0); // OK sincronizza correttamente
+        assertTrue(dm.SyncIscrittitoDolibarr() > 0);
+        assertTrue(dm.syncProspect() > 0);
     }
 }

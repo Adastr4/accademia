@@ -92,22 +92,23 @@ public abstract class DemoneMediator {
          * Prima i dati legacy
          *
          */
-        odb.readData("/home/adastra/iscrizionewebinar.ods");
+        odb.readData("/home/nodejs/ownCloud/2021 - Accademia Europea/amministrazione/erpdata/iscrizionewebinar.ods");
         xb.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
 
         String[] iscritti = {
-            "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
-            "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
-            "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w",
-            "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
-            "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
-            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
-            "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
+            "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY", // 18-25/03/2021
+            "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ", //27/04/2021-04-11/05/2021
+            "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w", //15-22-29/06/2021
+            "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA", // 14-21-28/07/2021
+            "1X_zBaQKaNXiQPuSbjWIXb1yWmOcavcbIuZix7eSB8Ew", //09-16-23/07/2021
+            "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU", //29/09/2021-06-13/10/2021
+            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc", //21-28/10/2021
+            "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM", //14-21-28/09/2021
         };
         String[] iscrittiv2 = {
-            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
-            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
-            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+            "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ", //20-27/10/2021 09/11/2021
+            "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc", //15-22-29/10/2021
+            "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc", //21-28/10/2021
         };
         int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
 

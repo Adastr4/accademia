@@ -86,8 +86,10 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
 
         Map<String, Object> json = null;
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+        int i = 0;
         try {
             for (Webinar m : ((IWebinarMediator) dm).getWebinars()) {
+                i++;
                 input =
                     "{\"ref\":\"WEBINAR." +
                     new SimpleDateFormat("yyyyMMdd").format(m.getTimes().get(0).getStartTime()) +
@@ -133,7 +135,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return 1;
+        return i;
     }
 
     /**

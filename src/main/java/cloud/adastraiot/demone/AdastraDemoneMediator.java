@@ -17,19 +17,15 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     List<Webinar> webinars = new ArrayList<>();
     CSVBridge csvb = null;
-    String[] iscritti = {
-        "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
-        "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
-        "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w",
-        "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
-        "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
-        "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
-        "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
-    };
+    String[] iscritti = {};
     String[] iscrittiv2 = {
-        "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
-        "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
-        "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
+        "1DufQe4vdthJyspL6NrNKGNEfYFH2rTQR9usHMEAolCE", // 14 dicembre 2021
+        "1t9TRMQ_FgU_1sljq8ysCJhht9svLoo8Gy1Moa-KBkzs", // 11 novembre 2021
+        "19s7q3fr3tdGOyabGxDrZ4KCYzU8UTY-SQqDeYqYt9UM", // 14 Ottobre 2021
+        "1Ew2EakRY0D9YIKDiIOVqMLEExYVngrMBqaJtTkTMqU0", // 08-15-27/07/2021 Luglio 2021
+        "1XU2ODADHKR818-D5G4vZHS_OxLZdz6IBJpTGoOIymtY", // 17-22-29/06/2021 Giugno 2021
+        "1N41gWtRb60nQtizq7NYHPvxk8_TJQQqSfOsSRHMyWTI", // 13-27/05/2021 Maggio 2021
+        "1CjrzozfP4ZpQKSFM3Ta6na3BwwEpwD71OQvuzg2HAjk", // 15-29/04/2021 Aprile 2021
     };
     int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
 
@@ -85,26 +81,7 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
         //syncFatture();
 
-        /**
-         * Prima i dati legacy
-         *
-         */
-        // odb.readData("/home/adastra/iscrizionewebinar.ods");
-        // xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
-        //
-
-        //
-
-        //
-        // /**
-        // * Poi i dati di goto webinar
-        // */
-        // gtb.getIscritti();
-
-        // bg.InsertCustomers();
-        // syncWebinar();
-
-        return 1;
+        return clienti.size();
     }
 
     public int syncFatture() {
@@ -120,9 +97,9 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
         return 0;
     }
 
-    void syncWebinar() {
+    int syncWebinar() {
         gtb.getWebinars();
-        ((AdastraDolibarrBridge) bg).insertWebinar();
+        return ((AdastraDolibarrBridge) bg).insertWebinar();
     }
 
     @Override

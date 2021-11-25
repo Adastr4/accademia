@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import net.accademia.demone.domain.enumeration.Campi;
 
 /**
  * https://developers.google.com/sheets/api/quickstart/java
@@ -42,7 +43,7 @@ public abstract class GoogleSheet extends DataSource {
      * scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
-    private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+    protected static String CREDENTIALS_FILE_PATH = null;
     protected static String idclient = null;
     protected static String clientsecret = null;
     protected static String refreshToken = null;
@@ -74,7 +75,7 @@ public abstract class GoogleSheet extends DataSource {
      * @return
      * @throws IOException
      */
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+    static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = GoogleSheet.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
@@ -91,8 +92,7 @@ public abstract class GoogleSheet extends DataSource {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
         refreshToken = credential.getRefreshToken();
-        //credential.setAccessToken(getNewToken(refreshToken, idclient, clientsecret));
-        //credential.setRefreshToken(refreshToken);
+
         return credential;
     }
 
@@ -131,11 +131,11 @@ public abstract class GoogleSheet extends DataSource {
                 if (row.size() < 15) continue;
                 final int mailindex = formato[0];
                 Cliente ctemp = new Cliente(
-                    (String) row.get(formato[0]),
-                    (String) row.get(formato[1]),
-                    (String) row.get(formato[2]),
-                    (String) row.get(formato[3]),
-                    (String) row.get(formato[4]),
+                    (String) row.get(formato[Campi.EMAIL]),
+                    (String) row.get(formato[Campi.DENOMINAZIONE]),
+                    (String) row.get(formato[Campi.PIVA]),
+                    (String) row.get(formato[Campi.CU]),
+                    (String) row.get(formato[Campi.TEL]),
                     spreadsheetId + ":" + i
                 );
                 Cliente c = dm.getClienti().stream().filter(cliente -> cliente.equals(ctemp)).findAny().orElse(null);

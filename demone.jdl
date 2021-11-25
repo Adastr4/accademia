@@ -28,3 +28,13 @@ enum Fonte {
 relationship OneToMany{
 	Source 	to Error	
 } 
+
+
+enum Campi {
+    EMAIL,
+    NOME,
+    COGNOME,
+    VAT,
+    CU
+}
+

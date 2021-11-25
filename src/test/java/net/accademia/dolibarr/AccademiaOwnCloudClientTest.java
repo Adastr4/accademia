@@ -32,6 +32,11 @@ class AccademiaOwnCloudClientTest {
 
     OwnCloudBridge coct = new AccademiaOwnCloudBridge();
 
+    /**
+     * salva la cartella nella tabellla source del demone
+     * scarica tutti i file in locale
+     * i file sono pronti per essere importati
+     */
     @Test
     void test() {
         try {
