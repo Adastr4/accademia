@@ -65,9 +65,11 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
         return me;
     }
 
+    /**
+     *
+     */
     @Override
     public int syncProspect() {
-        // TODO Auto-generated method stub
         return 0;
     }
 }

@@ -4,19 +4,50 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author adastra
+ *
+ */
 public abstract class DemoneMediator {
 
+    /**
+     *
+     */
     protected Cliente me = null;
+    /**
+     *
+     */
     protected List<Cliente> clienti;
 
+    /**
+     *
+     */
     protected List<Invoice> fatture;
+    /**
+     *
+     */
     protected DolibarrBridge bg = null;
+    /**
+     *
+     */
     protected GoogleSheet gs = null;
+    /**
+     *
+     */
     protected GotoWebinarBridge gtb = null;
+    /**
+     *
+     */
     protected OdsBridge odb = null;
 
+    /**
+     *
+     */
     protected XLSBridge xb = null;
 
+    /**
+     *
+     */
     protected DemoneMediator() {
         clienti = new ArrayList<>();
 
@@ -27,6 +58,9 @@ public abstract class DemoneMediator {
         xb = new XLSBridge(this);
     }
 
+    /**
+     * @return
+     */
     public List<Cliente> getClienti() {
         return clienti;
     }
@@ -40,6 +74,7 @@ public abstract class DemoneMediator {
      * @param prov
      * @return
      */
+
     public Contatto searchContattofromCliente(String email, String lastname, String firstname, String prov) {
         Contatto c = null;
         Cliente trovato = null;
@@ -62,12 +97,21 @@ public abstract class DemoneMediator {
         return c;
     }
 
+    /**
+     * @return
+     */
     public List<Invoice> getFatture() {
         return fatture;
     }
 
+    /**
+     * @return
+     */
     public abstract int insertInvoices();
 
+    /**
+     * @param clienti
+     */
     public void setClienti(List<Cliente> clienti) {
         this.clienti = clienti;
     }
@@ -78,6 +122,7 @@ public abstract class DemoneMediator {
      *
      * @return
      */
+
     public int SyncIscrittitoDolibarr() {
         /**
          * Prima i dati legacy
@@ -120,7 +165,15 @@ public abstract class DemoneMediator {
         return 0;
     }
 
+    /**
+     * @return
+     */
     public abstract Cliente getMe();
 
+    /**
+     * carica i clienti potenziali.
+     * @return
+     */
+    @Deprecated
     public abstract int syncProspect();
 }
