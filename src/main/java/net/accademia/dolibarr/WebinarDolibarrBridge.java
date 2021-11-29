@@ -17,7 +17,7 @@ import org.springframework.web.client.RestClientException;
 
 public abstract class WebinarDolibarrBridge extends DolibarrBridge {
 
-    public WebinarDolibarrBridge(DemoneMediator dm) {
+    public WebinarDolibarrBridge(DemoneMediator dm) throws Exception {
         super(dm);
         // TODO Auto-generated constructor stub
     }
@@ -86,8 +86,10 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
 
         Map<String, Object> json = null;
         SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+        int i = 0;
         try {
             for (Webinar m : ((IWebinarMediator) dm).getWebinars()) {
+                i++;
                 input =
                     "{\"ref\":\"WEBINAR." +
                     new SimpleDateFormat("yyyyMMdd").format(m.getTimes().get(0).getStartTime()) +
@@ -106,7 +108,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
                     ret =
                         restTemplate.exchange(
                             insertapi +
-                            "?sqlfilters=(t.ref:like:'WEBINAR.2021." +
+                            "?sqlfilters=(t.ref:like:'WEBINAR." +
                             new SimpleDateFormat("yyyyMMdd").format(m.getTimes().get(0).getStartTime()) +
                             "." +
                             m.getWebinarKey() +
@@ -133,7 +135,7 @@ public abstract class WebinarDolibarrBridge extends DolibarrBridge {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return 1;
+        return i;
     }
 
     /**

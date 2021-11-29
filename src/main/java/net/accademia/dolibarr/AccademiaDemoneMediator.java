@@ -12,8 +12,14 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
 
     public AccademiaDemoneMediator() {
         super();
-        bg = new AccademiaDolibarrBridge(this);
-        gtb = new AccademiaGotoWebinarBridge(this);
+        try {
+            bg = new AccademiaDolibarrBridge(this);
+            gtb = new AccademiaGotoWebinarBridge(this);
+            gs = new AccademiaGoogleSheet(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -71,5 +77,10 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
     @Override
     public int syncProspect() {
         return 0;
+    }
+
+    public void syncWebinar() {
+        gtb.getWebinars();
+        ((WebinarDolibarrBridge) bg).insertWebinar();
     }
 }

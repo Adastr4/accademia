@@ -1,0 +1,40 @@
+
+/** 
+ * Entity name
+ */
+entity Source {
+	sourceid String
+	description String 
+	fonte Fonte
+	data Instant
+	
+}
+
+/** 
+ * Entity Error
+ */
+entity Error {
+	errorid Integer
+	description String
+	data Instant 
+	
+}
+enum Fonte {
+    GOOGLESHEET,
+    GOTOWEBINAR,
+    DOLIBARR,
+    FILE
+}
+relationship OneToMany{
+	Source 	to Error	
+} 
+
+
+enum Campi {
+    EMAIL,
+    NOME,
+    COGNOME,
+    VAT,
+    CU
+}
+

@@ -53,9 +53,9 @@ spring:
       # it can be set to any label, branch or commit of the configuration source Git repository
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://localhost:3306/demone?useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password:
+    url: jdbc:mariadb://212.237.47.99:3306/admin_demone?useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: demone
+    password: S8k5gx0@
     hikari:
       poolName: Hikari
       auto-commit: false

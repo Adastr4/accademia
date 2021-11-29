@@ -37,7 +37,7 @@ public abstract class GotoWebinarBridge extends DataSource {
     TokenResponse response = null;
     OAuth2Api oauth = null;
 
-    public GotoWebinarBridge(DemoneMediator dm) {
+    public GotoWebinarBridge(DemoneMediator dm) throws Exception {
         super(dm);
     }
 
@@ -109,11 +109,12 @@ public abstract class GotoWebinarBridge extends DataSource {
         Date a = new GregorianCalendar(2021, 12, 1).getTime();
         Cliente cl = dm.getMe();
         dm.getClienti().add(cl);
+        int i = 0;
         try {
             WebinarsApi webinarapi = new WebinarsApi();
 
             ReportingWebinarsResponse webinar = webinarapi.getWebinars(accesstoken, 8348404185963954557L, da, a, 0L, 200L);
-            int i = 0;
+
             for (Webinar m : webinar.getEmbedded().getWebinars()) {
                 i = 0;
                 for (Registrant registrant : getAllRegistrantsForWebinar(m.getWebinarKey())) {
@@ -141,7 +142,7 @@ public abstract class GotoWebinarBridge extends DataSource {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 1;
+        return i;
     }
 
     void getAccess() {
@@ -200,6 +201,8 @@ public abstract class GotoWebinarBridge extends DataSource {
      * @return
      */
     public int insertContacts() {
+        getToken();
+        int i = 0;
         try {
             Calendar myCalendar = new GregorianCalendar(2021, 1, 1);
             Date da = myCalendar.getTime(); // "2020-03-13T10:00:00Z"
@@ -220,6 +223,7 @@ public abstract class GotoWebinarBridge extends DataSource {
                 );
 
                 for (Registrant registrant : registrants) {
+                    i++;
                     input =
                         "{\"lastname\":\"" +
                         registrant.getLastName() +
@@ -235,6 +239,6 @@ public abstract class GotoWebinarBridge extends DataSource {
             e.printStackTrace();
         }
 
-        return 1;
+        return i;
     }
 }

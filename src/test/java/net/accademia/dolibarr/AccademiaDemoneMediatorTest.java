@@ -9,46 +9,43 @@ class AccademiaDemoneMediatorTest {
     DemoneMediator dm = new AccademiaDemoneMediator();
 
     @Test
-    void testInsertInvoices() {
-        //   fail("Not yet implemented");
-    }
+    void testInsertInvoices() {}
 
     @Test
-    void testSyncIscrittitoDolibarr() {
-        //  fail("Not yet implemented");
-    }
+    void testSyncIscrittitoDolibarr() {}
 
     @Test
-    void testGetMe() {
-        //   fail("Not yet implemented");
-    }
+    void testGetMe() {}
 
     @Test
     void testAccademiaDemoneMediator() {
-        fail("Not yet implemented");
+        //fail("Not yet implemented");
     }
 
     @Test
-    void testCreaWebinar() {
-        //   fail("Not yet implemented");
+    void testsyncWebinar() {
+        ((AccademiaDemoneMediator) dm).syncWebinar();
     }
 
     @Test
-    void testGetAllRegistrantsForWebinar() {
-        // fail("Not yet implemented");
-    }
+    void testGetAllRegistrantsForWebinar() {}
 
     @Test
-    void testGetWebinars() {
-        //  fail("Not yet implemented");
-    }
+    void testGetWebinars() {}
 
     /**
      * <ul>
+
      * <li> caricare le mail dei potenziali clienti </li>
      * <li> gestire gli stoop mail </li>
      * <li> il webinar è creato su dolibarr</li>
      * <li> il webinar è creato su gotowebinar</li>
+
+     * <li> il webinar è creato su gotowebinar</li>
+     * <li> caricare le mail dei potenziali clienti </li>
+     * <li> gestire gli stoop mail </li>
+     * <li> il webinar è creato su dolibarr</li>
+
      * <li> viene creata la form</li>
      * <li> viene creata la locandina </li>
      * <li> viene creata la timeline dell'evneto nel sito</li>
@@ -68,5 +65,9 @@ class AccademiaDemoneMediatorTest {
     @Test
     void testworkflow() {
         // dm.syncProspect();
+
+        // assertTrue(dm.syncWebinar()>0); // OK sincronizza correttamente
+        assertTrue(dm.SyncIscrittitoDolibarr() > 0);
+        assertTrue(dm.syncProspect() > 0);
     }
 }

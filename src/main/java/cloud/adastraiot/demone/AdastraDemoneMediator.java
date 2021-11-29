@@ -9,18 +9,41 @@ import java.util.List;
 import net.accademia.dolibarr.CSVBridge;
 import net.accademia.dolibarr.Cliente;
 import net.accademia.dolibarr.DemoneMediator;
+import net.accademia.dolibarr.GotoWebinarBridge;
 import net.accademia.dolibarr.IWebinarMediator;
+import net.accademia.dolibarr.OdsBridge;
 
 public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
     List<Webinar> webinars = new ArrayList<>();
     CSVBridge csvb = null;
+    String[] iscritti = {};
+    String[] iscrittiv2 = {
+        "1DufQe4vdthJyspL6NrNKGNEfYFH2rTQR9usHMEAolCE", // 14 dicembre 2021
+        "1t9TRMQ_FgU_1sljq8ysCJhht9svLoo8Gy1Moa-KBkzs", // 11 novembre 2021
+        "19s7q3fr3tdGOyabGxDrZ4KCYzU8UTY-SQqDeYqYt9UM", // 14 Ottobre 2021
+        "1Ew2EakRY0D9YIKDiIOVqMLEExYVngrMBqaJtTkTMqU0", // 08-15-27/07/2021 Luglio 2021
+        "1XU2ODADHKR818-D5G4vZHS_OxLZdz6IBJpTGoOIymtY", // 17-22-29/06/2021 Giugno 2021
+        "1N41gWtRb60nQtizq7NYHPvxk8_TJQQqSfOsSRHMyWTI", // 13-27/05/2021 Maggio 2021
+        "1CjrzozfP4ZpQKSFM3Ta6na3BwwEpwD71OQvuzg2HAjk", // 15-29/04/2021 Aprile 2021
+    };
+    int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e di goobgle
 
     public AdastraDemoneMediator() {
         super();
-        bg = new AdastraDolibarrBridge(this);
-        gtb = new AdastraGotoWebinarBridge(this);
-        csvb = new CSVBridge(this);
+        csvinvoicefolder = "/home/adastra/Scaricati/fatture";
+        odsfolder = "";
+        xlsfolder = "";
+
+        try {
+            bg = new AdastraDolibarrBridge(this);
+            gtb = new AdastraGotoWebinarBridge(this);
+            csvb = new CSVBridge(this);
+            gs = new AdastraGoogleSheet(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -40,54 +63,31 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
 
     @Override
     public int SyncIscrittitoDolibarr() {
-        syncFatture();
+        File actual = new File(odsfolder);
+        if (actual.listFiles() != null) for (File f : actual.listFiles()) {
+            odb.readData(f.getAbsolutePath());
+        }
+        actual = new File(xlsfolder);
+        if (actual.listFiles() != null) for (File f : actual.listFiles()) {
+            xb.readData(f.getAbsolutePath());
+        }
+        for (String element : iscritti) {
+            gs.getIscritti(element, null);
+        }
 
-        // syncWebinar();
+        for (String element : iscrittiv2) {
+            gs.getIscritti(element, formato);
+        }
 
-        /**
-         * Prima i dati legacy
-         *
-         */
-        // odb.readData("/home/adastra/iscrizionewebinar.ods");
-        // xb.readXLS(new File("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx"));
-        //
-        // String[] iscritti = { "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY",
-        // "1S0m1x5j9sxZyCtflqJs8pV2NIFMrwUb3GlLhGzDRGEQ",
-        // "1pAT4iJZISaSjdjWUczjpQ8Kb0p31hekvhiEBzS4yj_w",
-        // "11ozxzipNGmx5GK2gLXaYFpZOlBMx7KQ30aQsuX74RWA",
-        // "1xDb7EBPP2iawB24-0P_1uYVjH6pbKnFAl3VnVzP9HCU",
-        // "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc",
-        // "1RrSjh4wdBiJOQUJUnpOF1sWY_xwrWfu3jFnn5XVwbqM",
-        //
-        // };
-        // String[] iscrittiv2 = { "1crjWiXjIKsT5PHkM_Nh8onbkGLf8ZRIK6VHYzMfyKuQ",
-        // "1MbsoIz64GQb6IuauBfPVW6xciFGfK9Eq7ILfliherQc",
-        // "11R9B7bB1fK0851jehQLsL4TeMEbUfywbSlb5zy49qpc", };
-        // int formato[] = { 14, 11, 15, 13, 5 }; // sono cambiate le colonne del fil e
-        // di goobgle
-        //
-        // for (String element : iscritti) {
-        // gs.getIscritti(element, null);
-        // }
-        //
-        // for (String element : iscrittiv2) {
-        // gs.getIscritti(element, formato);
-        // }
-        //
-        // /**
-        // * Poi i dati di goto webinar
-        // */
-        // gtb.getIscritti();
+        //syncFatture();
 
-        // bg.InsertCustomers();
-        // syncWebinar();
-
-        return 1;
+        return clienti.size();
     }
 
     public int syncFatture() {
         // clienti.add(getMe());
-        File actual = new File("/home/adastra/Scaricati/fatture");
+
+        File actual = new File(csvinvoicefolder);
         for (File f : actual.listFiles()) {
             csvb.readData(f.getAbsolutePath());
         }
@@ -97,9 +97,9 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
         return 0;
     }
 
-    void syncWebinar() {
+    int syncWebinar() {
         gtb.getWebinars();
-        ((AdastraDolibarrBridge) bg).insertWebinar();
+        return ((AdastraDolibarrBridge) bg).insertWebinar();
     }
 
     @Override

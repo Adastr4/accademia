@@ -1,0 +1,36 @@
+{
+  "name": "Error",
+  "fields": [
+    {
+      "fieldName": "errorid",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "data",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "source",
+      "otherEntityRelationshipName": "error",
+      "relationshipName": "source"
+    }
+  ],
+  "javadoc": "Entity Error",
+  "entityTableName": "error",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211116123344"
+}

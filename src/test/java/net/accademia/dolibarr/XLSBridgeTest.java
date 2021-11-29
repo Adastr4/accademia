@@ -7,7 +7,16 @@ import org.junit.jupiter.api.Test;
 
 class XLSBridgeTest {
 
-    XLSBridge db = new XLSBridge(new AccademiaDemoneMediator());
+    XLSBridge db = null;
+
+    {
+        try {
+            db = new XLSBridge(new AccademiaDemoneMediator());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void testReadXLS() {

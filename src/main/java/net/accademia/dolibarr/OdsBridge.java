@@ -8,7 +8,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 public class OdsBridge extends DataSource implements FileReaderBridge {
 
-    public OdsBridge(DemoneMediator dm) {
+    public OdsBridge(DemoneMediator dm) throws Exception {
         super(dm);
         // TODO Auto-generated constructor stub
     }

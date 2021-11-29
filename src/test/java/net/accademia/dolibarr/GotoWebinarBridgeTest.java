@@ -6,7 +6,16 @@ import org.junit.jupiter.api.Test;
 
 class GotoWebinarBridgeTest {
 
-    GotoWebinarBridge db = new AccademiaGotoWebinarBridge(null);
+    GotoWebinarBridge db = null;
+
+    {
+        try {
+            db = new AccademiaGotoWebinarBridge(new AccademiaDemoneMediator());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void getIscrittiTest() {
@@ -15,7 +24,7 @@ class GotoWebinarBridgeTest {
 
     @Test
     void insertContactTest() {
-        assertTrue(db.insertContacts() == 1);
+        assertTrue(db.insertContacts() > 1);
     }
 
     @Test
@@ -26,5 +35,10 @@ class GotoWebinarBridgeTest {
     @Test
     void getTokenTest() {
         db.getToken();
+    }
+
+    @Test
+    void getAccessTest() {
+        db.getAccess();
     }
 }

@@ -1,0 +1,41 @@
+{
+  "name": "Source",
+  "fields": [
+    {
+      "fieldName": "sourceid",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fonte",
+      "fieldType": "Fonte",
+      "fieldValues": "GOOGLESHEET,GOTOWEBINAR,DOLIBARR,FILE"
+    },
+    {
+      "fieldName": "data",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "error",
+      "otherEntityRelationshipName": "source",
+      "relationshipName": "error"
+    }
+  ],
+  "javadoc": "Entity name",
+  "entityTableName": "source",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211116123343"
+}

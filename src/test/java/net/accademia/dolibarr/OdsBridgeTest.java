@@ -7,7 +7,16 @@ import org.junit.jupiter.api.Test;
 
 class OdsBridgeTest {
 
-    OdsBridge db = new OdsBridge(new AccademiaDemoneMediator());
+    OdsBridge db = null;
+
+    {
+        try {
+            db = new OdsBridge(new AccademiaDemoneMediator());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void testReadODS() {
