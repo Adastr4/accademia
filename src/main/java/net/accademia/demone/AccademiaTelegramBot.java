@@ -21,11 +21,9 @@ public class AccademiaTelegramBot {
 
     String bot_token = "5061679080:AAEkVopyxlibmqchEsjItpLAjpc5P5kqleo";
     TelegramBot bot = new TelegramBot(bot_token);
-    private String chatId = "238078560";
 
     public AccademiaTelegramBot() {
         super();
-        // Register for updates
         bot.setUpdatesListener(
             updates -> {
                 // ... process updates
