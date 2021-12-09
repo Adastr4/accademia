@@ -12,4 +12,9 @@ class RedmineBridgeTest {
     void getIssueTest() {
         assertTrue(rmb.getIssue() != null);
     }
+
+    @Test
+    void getgetTimeEntriesTest() {
+        assertTrue(rmb.getTimeEntries() != null);
+    }
 }

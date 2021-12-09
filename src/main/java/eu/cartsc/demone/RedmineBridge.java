@@ -53,7 +53,7 @@ public class RedmineBridge {
             TimeEntryManager timeEntryManager = mgr.getTimeEntryManager();
             final Map<String, String> params = new HashMap<>();
             params.put("project_id", projectKey);
-            params.put("activity_id", activityId);
+            //params.put("activity_id", activityId);
             ResultsWrapper<TimeEntry> elements = timeEntryManager.getTimeEntries(params);
             return elements;
         } catch (RedmineException e) {
