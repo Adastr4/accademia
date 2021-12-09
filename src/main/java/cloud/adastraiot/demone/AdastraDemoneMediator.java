@@ -118,4 +118,10 @@ public class AdastraDemoneMediator extends DemoneMediator implements IWebinarMed
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override
+    protected void importTasks() {
+        // TODO Auto-generated method stub
+
+    }
 }

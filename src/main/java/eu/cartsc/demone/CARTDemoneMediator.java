@@ -27,4 +27,10 @@ public class CARTDemoneMediator extends DemoneMediator {
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override
+    protected void importTasks() {
+        // TODO Auto-generated method stub
+
+    }
 }

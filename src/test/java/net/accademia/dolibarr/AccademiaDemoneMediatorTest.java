@@ -2,6 +2,10 @@ package net.accademia.dolibarr;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.taskadapter.redmineapi.bean.Issue;
+import eu.cartsc.demone.RedmineBridge;
+import java.util.List;
+import net.accademia.demone.AccademiaRedmineBridge;
 import org.junit.jupiter.api.Test;
 
 class AccademiaDemoneMediatorTest {
@@ -69,5 +73,10 @@ class AccademiaDemoneMediatorTest {
         // assertTrue(dm.syncWebinar()>0); // OK sincronizza correttamente
         assertTrue(dm.SyncIscrittitoDolibarr() > 0);
         assertTrue(dm.syncProspect() > 0);
+    }
+
+    @Test
+    void testimport() {
+        dm.importTasks();
     }
 }

@@ -3,8 +3,14 @@ package net.accademia.dolibarr;
 import com.logmein.gotowebinar.api.common.ApiException;
 import com.logmein.gotowebinar.api.model.Registrant;
 import com.logmein.gotowebinar.api.model.Webinar;
+import com.taskadapter.redmineapi.RedmineException;
+import com.taskadapter.redmineapi.bean.Issue;
+import eu.cartsc.demone.RedmineBridge;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import net.accademia.demone.AccademiaRedmineBridge;
 
 public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarMediator {
 
@@ -16,6 +22,7 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
             bg = new AccademiaDolibarrBridge(this);
             gtb = new AccademiaGotoWebinarBridge(this);
             gs = new AccademiaGoogleSheet(this);
+            rmb = new AccademiaRedmineBridge();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -82,5 +89,62 @@ public class AccademiaDemoneMediator extends DemoneMediator implements IWebinarM
     public void syncWebinar() {
         gtb.getWebinars();
         ((WebinarDolibarrBridge) bg).insertWebinar();
+    }
+
+    /**
+     * esegue l'importazione di tutti i file inseriti nel ticket i ticket devono
+     * essere assegnati a demone accademia
+     *
+     */
+    @Override
+    protected void importTasks() {
+        List<Issue> ret = rmb.getMyIssue();
+        if (ret == null) {
+            return;
+        }
+        if (ret.size() == 0) {
+            return;
+        }
+        try {
+            for (Issue issue : ret) {
+                if (importTask(issue) != 0) continue;
+
+                issue.setStatusId(5);
+                issue.setNotes("\r\neseguito con successo");
+
+                issue.update();
+            }
+        } catch (RedmineException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /** importa la lista specificata nella tabella,
+     * quello importato lo inserisce come fatto,
+     * quello che non capisce non lo fa
+     * @param issue
+     * @return
+     */
+    private int importTask(Issue issue) {
+        try {
+            String descrizione = issue.getDescription();
+            if (descrizione == null) return 1;
+            descrizione = descrizione.substring(descrizione.indexOf('|'), descrizione.lastIndexOf('|'));
+
+            Map<String, String> map = new LinkedHashMap<String, String>();
+            for (String keyValue : descrizione.split("\\n")) {
+                String[] pairs = keyValue.split("\\|", -1);
+                map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
+            }
+            String[] array = descrizione.split("\\|", -1);
+            issue.setNotes("\r\npippo");
+            issue.update();
+            return 0;
+        } catch (RedmineException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

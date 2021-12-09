@@ -1,8 +1,10 @@
 package net.accademia.dolibarr;
 
 import eu.cartsc.demone.OwnCloudBridge;
+import eu.cartsc.demone.RedmineBridge;
 import java.util.ArrayList;
 import java.util.List;
+import net.accademia.demone.AccademiaRedmineBridge;
 
 /**
  * @author adastra
@@ -55,6 +57,7 @@ public abstract class DemoneMediator {
      */
 
     protected OwnCloudBridge oc = null;
+    RedmineBridge rmb = null;
 
     protected DemoneMediator() {
         try {
@@ -189,4 +192,6 @@ public abstract class DemoneMediator {
      */
     @Deprecated
     public abstract int syncProspect();
+
+    protected abstract void importTasks();
 }
