@@ -457,6 +457,11 @@
 			<artifactId>java-telegram-bot-api</artifactId>
 			<version>5.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>eu.cartsc.pdf</groupId>
+			<artifactId>pdfgenerator</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
