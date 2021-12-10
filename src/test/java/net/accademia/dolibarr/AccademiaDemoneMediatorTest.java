@@ -16,7 +16,9 @@ class AccademiaDemoneMediatorTest {
     void testInsertInvoices() {}
 
     @Test
-    void testSyncIscrittitoDolibarr() {}
+    void testSyncIscrittitoDolibarr() {
+        assertTrue(dm.SyncIscrittitoDolibarr() > 0);
+    }
 
     @Test
     void testGetMe() {}

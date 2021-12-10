@@ -20,16 +20,16 @@ class AccademiaRedmineBridgeTest {
 
     @Test
     void eseguiMyTicketTest() {
-        List<Issue> ret = rmb.getMyIssue();
-        if (ret == null) {
-            assertTrue(false);
-            return;
-        }
-        if (ret.size() == 0) {
-            assertTrue(false);
-            return;
-        }
         try {
+            List<Issue> ret = rmb.getMyIssue();
+            if (ret == null) {
+                assertTrue(false);
+                return;
+            }
+            if (ret.size() == 0) {
+                assertTrue(false);
+                return;
+            }
             ret.get(0).setStatusId(5);
             ret.get(0).setNotes("eseguito con successo");
 

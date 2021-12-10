@@ -139,12 +139,22 @@ public abstract class DemoneMediator {
      */
 
     public int SyncIscrittitoDolibarr() {
-        /**
-         * Prima i dati legacy
-         *
-         */
-        odb.readData("/home/nodejs/ownCloud/2021 - Accademia Europea/amministrazione/erpdata/iscrizionewebinar.ods");
-        xb.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
+        try {
+            /**
+             * scarica in locale tutti i file della cartella e nelle sottocartelle
+             * */
+            oc.getFiles("2021 - Accademia Europea/amministrazione/erpdata/import");
+
+            /**
+             * Prima i dati legacy
+             *
+             */
+            odb.readData("/home/nodejs/ownCloud/2021 - Accademia Europea/amministrazione/erpdata/iscrizionewebinar.ods");
+            xb.readData("/home/adastra/ISCRIZIONE WEBINAR20210224.xlsx");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         String[] iscritti = {
             "10hI-OeiU1huDcO2Z0Aq6ibwVPQlz3jbG2aQhJcMn-AY", // 18-25/03/2021

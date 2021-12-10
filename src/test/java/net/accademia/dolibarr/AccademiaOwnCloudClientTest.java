@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { DemoneApp.class })
 @IntegrationTest
 //@SpringBootApplication()
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class AccademiaOwnCloudClientTest {
 
     DemoneMediator dm = new AccademiaDemoneMediator();
